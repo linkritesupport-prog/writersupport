@@ -4,188 +4,292 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Help & Support — Linkrite</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <!-- Professional Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
   <style>
     :root {
-      --green-deep: #132d1e;
-      --green-mid: #1e4a2f;
-      --green-light: #2a6642;
-      --gold: #c9a84c;
-      --gold-light: #e2c97e;
-      --cream: #f5f0e8;
-      --cream-dark: #ede6d6;
+      /* Professional Color Palette: Oxblood, Blue, White */
+      --oxblood: #601010;
+      --oxblood-dark: #450a0a;
+      --blue-primary: #003366; /* Bank of America Blue */
+      --blue-secondary: #0056b3;
+      --blue-light: #f0f5ff;
       --white: #ffffff;
-      --text-dark: #0e1f15;
-      --text-muted: #5a7264;
-      --border: rgba(201,168,76,0.25);
+      --gray-light: #f8f9fa;
+      --gray-border: #dee2e6;
+      --text-main: #212529;
+      --text-muted: #6c757d;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--cream);
-      color: var(--text-dark);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--white);
+      color: var(--text-main);
+      line-height: 1.6;
       overflow-x: hidden;
     }
 
-    /* ── NAV ── */
+    /* ── NAVIGATION ── */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 100;
+      z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 5%;
-      height: 70px;
-      background: rgba(19,45,30,0.97);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      padding: 0 8%;
+      height: 80px;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
 
     .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--cream);
+      font-family: 'Libre+Baskerville', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--blue-primary);
       text-decoration: none;
+      letter-spacing: -0.5px;
     }
-    .logo span { color: var(--gold); }
+    .logo span { color: #ffcc00; font-style: italic; }
 
     .nav-links {
       display: flex;
-      gap: 2rem;
+      gap: 2.5rem;
       list-style: none;
+      align-items: center;
     }
     .nav-links a {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 500;
-      color: rgba(245,240,232,0.75);
+      color: var(--text-main);
       text-decoration: none;
-      text-transform: uppercase;
-      transition: color 0.2s;
+      transition: var(--transition);
+      position: relative;
     }
-    .nav-links a:hover { color: var(--gold); }
-
-    /* ── MAIN CONTENT ── */
-    .help-container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 8rem 5% 5rem;
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--oxblood);
+      transition: var(--transition);
     }
+    .nav-links a:hover { color: var(--oxblood); }
+    .nav-links a:hover::after { width: 100%; }
 
-    .help-header {
+    .nav-cta {
+      background: var(--blue-primary);
+      color: var(--white) !important;
+      padding: 0.6rem 1.5rem;
+      border-radius: 4px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover {
+      background: var(--oxblood) !important;
+      transform: translateY(-1px);
+    }
+    .nav-cta::after { display: none !important; }
+
+    /* ── HERO SECTION ── */
+    .hero {
+      background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-secondary) 100%);
+      padding: 10rem 5% 6rem;
       text-align: center;
-      margin-bottom: 3rem;
+      color: var(--white);
+      clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
     }
 
-    .help-header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: var(--green-deep);
-      margin-bottom: 0.75rem;
+    .hero h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
     }
 
-    .help-header p {
+    .hero p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .search-container {
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .search-container input {
+      width: 100%;
+      padding: 1.2rem 1.5rem 1.2rem 3.5rem;
+      border-radius: 50px;
+      border: none;
       font-size: 1rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      outline: none;
+    }
+
+    .search-container i {
+      position: absolute;
+      left: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
       color: var(--text-muted);
-      margin-bottom: 2rem;
+      font-size: 1.4rem;
+    }
+
+    /* ── MAIN CONTAINER ── */
+    .main-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 5%;
     }
 
     /* ── QUICK LINKS ── */
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .section-title h2 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 2rem;
+      color: var(--blue-primary);
+      margin-bottom: 0.5rem;
+    }
+    .section-title .underline {
+      width: 60px;
+      height: 4px;
+      background: var(--oxblood);
+      margin: 0 auto;
+    }
+
     .quick-links {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 4rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      margin-bottom: 6rem;
     }
 
     .quick-link-card {
       background: var(--white);
-      border: 1px solid var(--cream-dark);
-      border-radius: 4px;
-      padding: 1.75rem;
+      border: 1px solid var(--gray-border);
+      border-radius: 8px;
+      padding: 2.5rem 2rem;
       text-align: center;
-      transition: all 0.3s;
+      transition: var(--transition);
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .quick-link-card:hover {
-      background: rgba(201,168,76,0.05);
-      border-color: var(--gold);
-      transform: translateY(-2px);
+      border-color: var(--blue-primary);
+      box-shadow: 0 15px 35px rgba(0,51,102,0.08);
+      transform: translateY(-5px);
     }
 
     .quick-link-icon {
-      font-size: 2rem;
-      color: var(--gold);
-      margin-bottom: 0.75rem;
+      width: 60px;
+      height: 60px;
+      background: var(--blue-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .quick-link-card:hover .quick-link-icon {
+      background: var(--oxblood);
+    }
+
+    .quick-link-icon i {
+      font-size: 1.8rem;
+      color: var(--blue-primary);
+      transition: var(--transition);
+    }
+
+    .quick-link-card:hover .quick-link-icon i {
+      color: var(--white);
     }
 
     .quick-link-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: 700;
-      color: var(--green-deep);
-      margin-bottom: 0.5rem;
+      color: var(--blue-primary);
+      margin-bottom: 0.75rem;
     }
 
     .quick-link-card p {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: var(--text-muted);
       line-height: 1.6;
     }
 
     /* ── FAQ SECTION ── */
     .faq-section {
-      margin-top: 4rem;
+      background: var(--gray-light);
+      padding: 5rem 0;
+      margin: 0 -100vw;
+      padding-left: 100vw;
+      padding-right: 100vw;
     }
 
-    .faq-section h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--green-deep);
-      margin-bottom: 2rem;
-      text-align: center;
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
     }
 
     .faq-item {
       background: var(--white);
-      border: 1px solid var(--cream-dark);
-      border-radius: 4px;
+      border: 1px solid var(--gray-border);
+      border-radius: 8px;
       margin-bottom: 1rem;
       overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .faq-item:hover {
+      border-color: var(--blue-secondary);
     }
 
     .faq-question {
-      padding: 1.25rem 1.5rem;
-      background: rgba(201,168,76,0.05);
+      padding: 1.5rem 2rem;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: background 0.2s;
-    }
-
-    .faq-question:hover {
-      background: rgba(201,168,76,0.1);
+      user-select: none;
     }
 
     .faq-question-text {
       font-weight: 600;
-      color: var(--green-deep);
-      font-size: 0.95rem;
+      color: var(--blue-primary);
+      font-size: 1.05rem;
     }
 
     .faq-toggle {
-      color: var(--gold);
-      transition: transform 0.3s;
-      font-size: 1.2rem;
+      color: var(--oxblood);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 1.4rem;
+    }
+
+    .faq-item.open {
+      border-color: var(--oxblood);
+      box-shadow: 0 5px 15px rgba(96,16,16,0.05);
     }
 
     .faq-item.open .faq-toggle {
@@ -193,273 +297,399 @@
     }
 
     .faq-answer {
-      padding: 1.5rem;
-      color: var(--text-dark);
-      font-size: 0.9rem;
-      line-height: 1.8;
-      display: none;
-      border-top: 1px solid var(--border);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out;
+      background: var(--white);
     }
 
     .faq-item.open .faq-answer {
-      display: block;
+      max-height: 500px;
+    }
+
+    .faq-answer-content {
+      padding: 0 2rem 2rem;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      border-top: 1px solid transparent;
     }
 
     /* ── CONTACT SECTION ── */
     .contact-section {
-      background: var(--green-deep);
-      border-radius: 4px;
-      padding: 2.5rem;
-      margin-top: 4rem;
+      margin-top: 6rem;
+      background: var(--white);
+      border: 2px solid var(--blue-light);
+      border-radius: 12px;
+      padding: 4rem;
       text-align: center;
-      color: var(--cream);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.03);
     }
 
     .contact-section h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      margin-bottom: 0.75rem;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 2rem;
+      color: var(--blue-primary);
+      margin-bottom: 1rem;
     }
 
     .contact-section p {
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
-      color: rgba(245,240,232,0.8);
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 3rem;
     }
 
     .contact-options {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
     }
 
     .contact-option {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(201,168,76,0.2);
-      border-radius: 3px;
-      padding: 1.5rem;
+      padding: 2rem;
+      border-radius: 8px;
+      background: var(--gray-light);
+      transition: var(--transition);
+    }
+
+    .contact-option:hover {
+      background: var(--blue-light);
+      transform: translateY(-3px);
+    }
+
+    .contact-option i {
+      font-size: 2.5rem;
+      color: var(--oxblood);
+      margin-bottom: 1rem;
+      display: block;
     }
 
     .contact-option a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      color: var(--gold);
+      color: var(--blue-primary);
       text-decoration: none;
-      font-weight: 600;
-      transition: color 0.2s;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: block;
+      margin-top: 0.5rem;
     }
 
-    .contact-option a:hover {
-      color: var(--gold-light);
+    .contact-option span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 0.25rem;
     }
 
     /* ── FOOTER ── */
     footer {
-      background: var(--green-deep);
-      padding: 3rem 8% 1.5rem;
-      border-top: 1px solid var(--border);
-      margin-top: 4rem;
+      background: var(--blue-primary);
+      color: rgba(255,255,255,0.8);
+      padding: 5rem 8% 2rem;
+      margin-top: 6rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 4rem;
+    }
+
+    .footer-brand .logo {
+      color: var(--white);
+      margin-bottom: 1.5rem;
+      display: inline-block;
+    }
+
+    .footer-brand p {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      max-width: 300px;
+    }
+
+    .footer-heading {
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.8rem;
     }
 
     .footer-links a {
-      font-size: 0.85rem;
-      color: rgba(245,240,232,0.6);
+      color: rgba(255,255,255,0.6);
       text-decoration: none;
-      transition: color 0.2s;
+      font-size: 0.9rem;
+      transition: var(--transition);
     }
 
-    .footer-links a:hover { color: var(--gold); }
+    .footer-links a:hover {
+      color: var(--white);
+      padding-left: 5px;
+    }
 
     .footer-bottom {
       text-align: center;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(201,168,76,0.1);
-      font-size: 0.78rem;
-      color: rgba(245,240,232,0.35);
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 992px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 768px) {
-      .help-container { padding: 8rem 4% 3rem; }
-      .help-header h1 { font-size: 1.6rem; }
-      .quick-links { grid-template-columns: 1fr; }
-      .contact-options { grid-template-columns: 1fr; }
+      nav { padding: 0 5%; }
+      .nav-links { display: none; }
+      .hero h1 { font-size: 2.2rem; }
+      .contact-section { padding: 2rem; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
+  <!-- NAVIGATION -->
   <nav>
     <a href="index.html" class="logo">Link<span>rite</span></a>
     <ul class="nav-links">
       <li><a href="index.html#services">Services</a></li>
       <li><a href="index.html#store">Store</a></li>
       <li><a href="about.html">About</a></li>
-      <li><a href="index.html#consult" class="nav-cta">Contact</a></li>
+      <li><a href="index.html#consult" class="nav-cta">Contact Support</a></li>
     </ul>
   </nav>
 
-  <!-- MAIN CONTENT -->
-  <div class="help-container">
-    <div class="help-header">
-      <h1>Help & Support Center</h1>
-      <p>Find answers to common questions and learn how to get the most from Linkrite services</p>
+  <!-- HERO SECTION -->
+  <header class="hero">
+    <h1>How can we help you?</h1>
+    <p>Search our knowledge base or browse categories below to find the answers you need for your research projects.</p>
+    <div class="search-container">
+      <i class="bx bx-search"></i>
+      <input type="text" placeholder="Search for articles, services, or policies...">
     </div>
+  </header>
 
+  <!-- MAIN CONTENT -->
+  <main class="main-container">
+    
     <!-- QUICK LINKS -->
+    <section class="section-title">
+      <h2>Support Categories</h2>
+      <div class="underline"></div>
+    </section>
+
     <div class="quick-links">
       <div class="quick-link-card">
-        <div class="quick-link-icon"><i class="bx bx-play-circle"></i></div>
+        <div class="quick-link-icon"><i class="bx bx-rocket"></i></div>
         <h3>Getting Started</h3>
-        <p>Learn how to submit your first service request and set up your account</p>
+        <p>Learn how to submit your first service request and set up your account for success.</p>
       </div>
       <div class="quick-link-card">
-        <div class="quick-link-icon"><i class="bx bx-file"></i></div>
-        <h3>Service Descriptions</h3>
-        <p>Detailed information about each service and what to expect</p>
+        <div class="quick-link-icon"><i class="bx bx-book-content"></i></div>
+        <h3>Service Guide</h3>
+        <p>Detailed information about each research service and what our experts deliver.</p>
       </div>
       <div class="quick-link-card">
-        <div class="quick-link-icon"><i class="bx bx-credit-card"></i></div>
+        <div class="quick-link-icon"><i class="bx bx-credit-card-front"></i></div>
         <h3>Billing & Payments</h3>
-        <p>Payment methods, refund policies, and pricing information</p>
+        <p>Secure payment methods, institutional invoicing, and our transparent refund policies.</p>
       </div>
       <div class="quick-link-card">
-        <div class="quick-link-icon"><i class="bx bx-shield"></i></div>
-        <h3>Data Security</h3>
-        <p>How we protect your research data and maintain confidentiality</p>
+        <div class="quick-link-icon"><i class="bx bx-shield-quarter"></i></div>
+        <h3>Data Privacy</h3>
+        <p>How we protect your intellectual property and maintain strict confidentiality standards.</p>
       </div>
     </div>
 
     <!-- FAQ SECTION -->
-    <div class="faq-section">
-      <h2>Frequently Asked Questions</h2>
-
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">What is your typical turnaround time?</span>
-          <span class="faq-toggle">▼</span>
-        </div>
-        <div class="faq-answer">Most services are completed within 5-10 business days depending on project complexity. Standard timelines are: Manuscript Editing (5-7 days), Statistical Analysis (7-10 days), Data Visualization (5-7 days), and Genomic Analysis (10-14 days). Rush services (24-48 hours) are available for an additional fee.</div>
+    <section class="faq-section">
+      <div class="section-title">
+        <h2>Frequently Asked Questions</h2>
+        <div class="underline"></div>
       </div>
 
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">How much do your services cost?</span>
-          <span class="faq-toggle">▼</span>
+      <div class="faq-container">
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">What is your typical turnaround time?</span>
+            <i class="bx bx-chevron-down faq-toggle"></i>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Most services are completed within 5-10 business days depending on project complexity. Standard timelines are: Manuscript Editing (5-7 days), Statistical Analysis (7-10 days), Data Visualization (5-7 days), and Genomic Analysis (10-14 days). Rush services (24-48 hours) are available for an additional fee.
+            </div>
+          </div>
         </div>
-        <div class="faq-answer">Pricing varies based on service type and project scope. Manuscript editing typically starts at $50/hour. Statistical analysis and data visualization have hourly rates from $60-$80/hour. Genomic analysis is quoted individually based on complexity. Request a quote on our contact form for exact pricing.</div>
-      </div>
 
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">Is my research data confidential?</span>
-          <span class="faq-toggle">▼</span>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">Is my research data confidential?</span>
+            <i class="bx bx-chevron-down faq-toggle"></i>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Absolutely. All client manuscripts, research data, and project details are treated as strictly confidential. We never share data with third parties without explicit written consent, and we do not publish or use your research without permission. A comprehensive NDA is available upon request for additional protection.
+            </div>
+          </div>
         </div>
-        <div class="faq-answer">Absolutely. All client manuscripts, research data, and project details are treated as strictly confidential. We never share data with third parties without explicit written consent, and we do not publish or use your research without permission. A comprehensive NDA is available upon request for additional protection.</div>
-      </div>
 
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">What are your revision policies?</span>
-          <span class="faq-toggle">▼</span>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">What are your revision policies?</span>
+            <i class="bx bx-chevron-down faq-toggle"></i>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              All services include up to 2 rounds of revisions at no additional cost. These revisions must be requested within 14 days of delivery. Additional revisions beyond the included rounds are charged at $50/hour. We want to ensure you're completely satisfied with your deliverables.
+            </div>
+          </div>
         </div>
-        <div class="faq-answer">All services include up to 2 rounds of revisions at no additional cost. These revisions must be requested within 14 days of delivery. Additional revisions beyond the included rounds are charged at $50/hour. We want to ensure you're completely satisfied with your deliverables.</div>
-      </div>
 
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">Do you offer refunds?</span>
-          <span class="faq-toggle">▼</span>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">Do you offer refunds?</span>
+            <i class="bx bx-chevron-down faq-toggle"></i>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Yes! Refunds are available within 24 hours of payment if no work has begun. For projects in progress, pro-rated refunds are provided based on work completed (no refund if 50%+ complete). Rush services are non-refundable once work has started. If we fail to deliver within the agreed timeline, a full refund is provided.
+            </div>
+          </div>
         </div>
-        <div class="faq-answer">Yes! Refunds are available within 24 hours of payment if no work has begun. For projects in progress, pro-rated refunds are provided based on work completed (no refund if 50%+ complete). Rush services are non-refundable once work has started. If we fail to deliver within the agreed timeline, a full refund is provided.</div>
-      </div>
 
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">Can you help with statistical analysis?</span>
-          <span class="faq-toggle">▼</span>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">Can you help with statistical analysis?</span>
+            <i class="bx bx-chevron-down faq-toggle"></i>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Yes! Our statistical analysis service covers descriptive statistics, regression analysis, ANOVA, survival analysis, multivariate analysis, and more. We work with SPSS, R, Python, and other statistical software. We provide detailed interpretation and publication-ready tables and figures.
+            </div>
+          </div>
         </div>
-        <div class="faq-answer">Yes! Our statistical analysis service covers descriptive statistics, regression analysis, ANOVA, survival analysis, multivariate analysis, and more. We work with SPSS, R, Python, and other statistical software. We provide detailed interpretation and publication-ready tables and figures.</div>
-      </div>
 
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">What payment methods do you accept?</span>
-          <span class="faq-toggle">▼</span>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">What payment methods do you accept?</span>
+            <i class="bx bx-chevron-down faq-toggle"></i>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              We accept Visa, Mastercard, American Express, PayPal, and bank transfers (wire). All payments are processed securely through PCI-DSS compliant processors. For institutional accounts, we offer Net 30 invoicing (subject to credit approval).
+            </div>
+          </div>
         </div>
-        <div class="faq-answer">We accept Visa, Mastercard, American Express, PayPal, and bank transfers (wire). All payments are processed securely through PCI-DSS compliant processors. For institutional accounts, we offer Net 30 invoicing (subject to credit approval).</div>
-      </div>
 
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">Do you work with international clients?</span>
-          <span class="faq-toggle">▼</span>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">Do you work with international clients?</span>
+            <i class="bx bx-chevron-down faq-toggle"></i>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Yes! We serve researchers and students worldwide. We accept international payments and work across time zones. Our team includes experts from multiple countries who understand diverse academic standards and publication requirements.
+            </div>
+          </div>
         </div>
-        <div class="faq-answer">Yes! We serve researchers and students worldwide. We accept international payments and work across time zones. Our team includes experts from multiple countries who understand diverse academic standards and publication requirements.</div>
-      </div>
 
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">Can you help with genomic data analysis?</span>
-          <span class="faq-toggle">▼</span>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">Can you help with genomic data analysis?</span>
+            <i class="bx bx-chevron-down faq-toggle"></i>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Yes! Our genomic analysis service includes NGS pipeline support, GWAS analysis, RNA-seq analysis, microbiome analysis, variant calling, annotation, and custom bioinformatics workflows. Projects are quoted individually based on data complexity and analysis scope.
+            </div>
+          </div>
         </div>
-        <div class="faq-answer">Yes! Our genomic analysis service includes NGS pipeline support, GWAS analysis, RNA-seq analysis, microbiome analysis, variant calling, annotation, and custom bioinformatics workflows. Projects are quoted individually based on data complexity and analysis scope.</div>
-      </div>
 
-      <div class="faq-item">
-        <div class="faq-question">
-          <span class="faq-question-text">How do I request a custom quote?</span>
-          <span class="faq-toggle">▼</span>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">How do I request a custom quote?</span>
+            <i class="bx bx-chevron-down faq-toggle"></i>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              You can request a custom quote by selecting "Get a Quote" on specific service pages or by contacting us directly at hello@linkrite.com. Provide details about your project scope, timeline, and any special requirements. We'll respond within 24 hours with a customized quote valid for 14 days.
+            </div>
+          </div>
         </div>
-        <div class="faq-answer">You can request a custom quote by selecting "Get a Quote" on specific service pages or by contacting us directly at hello@linkrite.com. Provide details about your project scope, timeline, and any special requirements. We'll respond within 24 hours with a customized quote valid for 14 days.</div>
       </div>
-    </div>
+    </section>
 
     <!-- CONTACT SECTION -->
-    <div class="contact-section">
+    <section class="contact-section">
       <h3>Still Have Questions?</h3>
-      <p>Our support team is here to help. Reach out using any of these methods:</p>
+      <p>Our dedicated support team is available to assist you with any inquiries.</p>
       <div class="contact-options">
         <div class="contact-option">
-          <a href="mailto:hello@linkrite.com">
-            <i class="bx bx-envelope"></i> Email
-          </a>
+          <i class="bx bx-envelope"></i>
+          <span>Email Us</span>
+          <a href="mailto:hello@linkrite.com">hello@linkrite.com</a>
         </div>
         <div class="contact-option">
-          <a href="index.html#consult">
-            <i class="bx bx-phone"></i> Request Call
-          </a>
+          <i class="bx bx-phone-call"></i>
+          <span>Call Support</span>
+          <a href="tel:+1234567890">+1 (800) LINK-RITE</a>
         </div>
         <div class="contact-option">
-          <a href="#" onclick="alert('Chat support coming soon!')">
-            <i class="bx bx-chat"></i> Chat
-          </a>
+          <i class="bx bx-chat"></i>
+          <span>Live Chat</span>
+          <a href="#" onclick="alert('Chat support coming soon!')">Start Chat</a>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-links">
-      <a href="about.html">About Us</a>
-      <a href="privacy-policy.html">Privacy Policy</a>
-      <a href="terms-conditions.html">Terms & Conditions</a>
-      <a href="help.html">Help</a>
-      <a href="index.html#services">Services</a>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">Link<span>rite</span></a>
+        <p>Empowering researchers with world-class editorial and analytical support since 2018.</p>
+      </div>
+      <div>
+        <h4 class="footer-heading">Services</h4>
+        <ul class="footer-links">
+          <li><a href="#">Manuscript Editing</a></li>
+          <li><a href="#">Statistical Analysis</a></li>
+          <li><a href="#">Data Visualization</a></li>
+          <li><a href="#">Genomic Analysis</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">Company</h4>
+        <ul class="footer-links">
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="#">Our Experts</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">Support</h4>
+        <ul class="footer-links">
+          <li><a href="help.html">Help Center</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="terms-conditions.html">Terms of Service</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 Linkrite.com — All rights reserved.</p>
+      <p>© 2026 Linkrite.com — All rights reserved. Professional Academic Services.</p>
     </div>
   </footer>
 
@@ -468,7 +698,17 @@
     document.querySelectorAll('.faq-question').forEach(question => {
       question.addEventListener('click', () => {
         const faqItem = question.closest('.faq-item');
-        faqItem.classList.toggle('open');
+        const isOpen = faqItem.classList.contains('open');
+        
+        // Close all other items (Accordion behavior)
+        document.querySelectorAll('.faq-item').forEach(item => {
+          item.classList.remove('open');
+        });
+
+        // Toggle current item
+        if (!isOpen) {
+          faqItem.classList.add('open');
+        }
       });
     });
   </script>

@@ -269,6 +269,77 @@ app.post('/api/public/requests', async (req, res) => {
   res.json({ id: result.lastID, success: true, emailSent });
 });
 
+// PUBLIC API — Website booking submissions (no auth required)
+app.post('/api/public/bookings', async (req, res) => {
+  console.log('📅 Received public booking submission');
+  const { name, service, date, time, email, status = 'confirmed' } = req.body;
+  console.log('📝 Booking data:', { name, service, date, time, email });
+  
+  if (!name || !service || !date || !time || !email) {
+    console.log('❌ Missing required booking fields');
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  const db = openDb();
+  const result = await runSql(db, 'INSERT INTO bookings (name, service, date, time, email, status) VALUES (?, ?, ?, ?, ?, ?)',
+    [name, service, date, time, email, status]);
+  db.close();
+  console.log('✅ Booking saved to database with ID:', result.lastID);
+
+  // Send confirmation email
+  const emailSubject = 'Consultation Booking Confirmed - Linkrite';
+  const emailHtml = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border-radius: 8px;">
+      <h2 style="color: #1a73e8; text-align: center;">Consultation Booking Confirmed ✓</h2>
+      <p>Hi ${name},</p>
+      <p>Your consultation booking has been confirmed! We're excited to discuss your ${service} needs with you.</p>
+      
+      <div style="background-color: #ffffff; padding: 20px; border-left: 4px solid #1a73e8; margin: 20px 0; border-radius: 4px;">
+        <h3 style="margin-top: 0; color: #333;">Consultation Details:</h3>
+        <p><strong>Service:</strong> ${service}</p>
+        <p><strong>Date:</strong> ${date}</p>
+        <p><strong>Time:</strong> ${time}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Booking ID:</strong> #${result.lastID}</p>
+        <p><strong>Status:</strong> Confirmed</p>
+      </div>
+
+      <div style="background-color: #e8f0fe; padding: 15px; border-radius: 4px; margin: 20px 0;">
+        <h3 style="margin-top: 0; color: #1a73e8;">Join Your Consultation</h3>
+        <p>Click the link below to join your consultation meeting:</p>
+        <p style="text-align: center;">
+          <a href="https://meet.google.com/Linkrite-consultation" style="display: inline-block; background-color: #1a73e8; color: white; padding: 12px 30px; text-decoration: none; border-radius: 4px; font-weight: bold;">Join Google Meet</a>
+        </p>
+        <p style="font-size: 12px; color: #666;">Meeting ID: Linkrite-consultation</p>
+      </div>
+
+      <div style="background-color: #fff3cd; padding: 15px; border-radius: 4px; margin: 20px 0; border-left: 4px solid #ffc107;">
+        <h3 style="margin-top: 0; color: #856404;">📋 Upcoming and Past Consultations</h3>
+        <p>You can manage all your consultations from your account. Check back anytime to:</p>
+        <ul style="color: #856404;">
+          <li>View upcoming consultation dates</li>
+          <li>Review past consultation notes</li>
+          <li>Reschedule or cancel if needed</li>
+        </ul>
+      </div>
+      
+      <p>If you need to reschedule or have any questions, please contact us directly.</p>
+      
+      <p style="margin-top: 30px; color: #999; font-size: 12px; border-top: 1px solid #ddd; padding-top: 15px;">
+        Best regards,<br>
+        <strong>Linkrite Team</strong><br>
+        <em>Professional Services & Solutions</em>
+      </p>
+    </div>
+  `;
+  
+  console.log(`📧 Attempting to send booking confirmation email to: ${email}`);
+  const emailSent = await sendEmail(email, emailSubject, emailHtml);
+  console.log(`📧 Booking email send result: ${emailSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
+  
+  res.json({ id: result.lastID, success: true, emailSent });
+});
+
 app.put('/api/requests/:id', authMiddleware, async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
@@ -375,6 +446,10 @@ app.get('/admin-login.html', (req, res, next) => {
 
 app.get('/adminpanel.html', authMiddleware, (req, res) => {
   res.sendFile(path.join(__dirname, 'adminpanel.html'));
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.use(express.static(path.join(__dirname)));

@@ -4,176 +4,277 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Privacy Policy — Linkrite</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+  <!-- Professional Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
     :root {
-      --green-deep: #132d1e;
-      --green-mid: #1e4a2f;
-      --green-light: #2a6642;
-      --gold: #c9a84c;
-      --gold-light: #e2c97e;
-      --cream: #f5f0e8;
-      --cream-dark: #ede6d6;
+      /* Professional Color Palette: Oxblood, Blue, White */
+      --oxblood: #601010;
+      --oxblood-dark: #450a0a;
+      --blue-primary: #003366; /* Bank of America Blue */
+      --blue-secondary: #0056b3;
+      --blue-light: #f0f5ff;
       --white: #ffffff;
-      --text-dark: #0e1f15;
-      --text-muted: #5a7264;
-      --border: rgba(201,168,76,0.25);
+      --gray-light: #f8f9fa;
+      --gray-border: #dee2e6;
+      --text-main: #212529;
+      --text-muted: #6c757d;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--cream);
-      color: var(--text-dark);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--white);
+      color: var(--text-main);
+      line-height: 1.8;
       overflow-x: hidden;
     }
 
-    /* ── NAV ── */
+    /* ── NAVIGATION ── */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 100;
+      z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 5%;
-      height: 70px;
-      background: rgba(19,45,30,0.97);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      padding: 0 8%;
+      height: 80px;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-border);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
 
     .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--cream);
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--blue-primary);
       text-decoration: none;
+      letter-spacing: -0.5px;
     }
-    .logo span { color: var(--gold); }
+    .logo span { color: #ffcc00; font-style: italic; }
 
     .nav-links {
       display: flex;
-      gap: 2rem;
+      gap: 2.5rem;
       list-style: none;
+      align-items: center;
     }
     .nav-links a {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 500;
-      color: rgba(245,240,232,0.75);
+      color: var(--text-main);
       text-decoration: none;
+      transition: var(--transition);
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--oxblood);
+      transition: var(--transition);
+    }
+    .nav-links a:hover { color: var(--oxblood); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      background: var(--blue-primary);
+      color: var(--white) !important;
+      padding: 0.6rem 1.5rem;
+      border-radius: 4px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover {
+      background: var(--oxblood) !important;
+      transform: translateY(-1px);
+    }
+    .nav-cta::after { display: none !important; }
+
+    /* ── HEADER ── */
+    .page-header {
+      background: var(--blue-light);
+      padding: 10rem 8% 6rem;
+      text-align: center;
+      border-bottom: 1px solid var(--gray-border);
+    }
+
+    .page-header h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 3rem;
+      color: var(--blue-primary);
+      margin-bottom: 1rem;
+    }
+
+    .page-header p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 600;
       text-transform: uppercase;
-      transition: color 0.2s;
+      letter-spacing: 1px;
     }
-    .nav-links a:hover { color: var(--gold); }
 
-    /* ── MAIN CONTENT ── */
-    .policy-container {
-      max-width: 800px;
+    /* ── CONTENT CONTAINER ── */
+    .content-wrapper {
+      max-width: 900px;
       margin: 0 auto;
-      padding: 8rem 5% 5rem;
-      line-height: 1.8;
+      padding: 6rem 5%;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 4rem;
     }
 
-    .policy-header {
-      margin-bottom: 3rem;
+    /* ── SIDEBAR NAVIGATION ── */
+    .sidebar-nav {
+      position: sticky;
+      top: 120px;
+      height: fit-content;
     }
 
-    .policy-header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: var(--green-deep);
+    .sidebar-nav h4 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--oxblood);
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    .sidebar-links {
+      list-style: none;
+      border-left: 2px solid var(--gray-border);
+    }
+
+    .sidebar-links li {
       margin-bottom: 0.5rem;
     }
 
-    .policy-header p {
-      font-size: 0.9rem;
+    .sidebar-links a {
+      display: block;
+      padding: 0.5rem 1.5rem;
       color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+      margin-left: -2px;
+      border-left: 2px solid transparent;
     }
 
-    .policy-section {
-      margin-bottom: 2.5rem;
-      padding-bottom: 2.5rem;
-      border-bottom: 1px solid var(--border);
+    .sidebar-links a:hover {
+      color: var(--blue-primary);
+      background: var(--blue-light);
     }
 
-    .policy-section h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
+    .sidebar-links a.active {
+      color: var(--blue-primary);
+      border-left-color: var(--blue-primary);
       font-weight: 700;
-      color: var(--green-deep);
-      margin-bottom: 1rem;
     }
 
-    .policy-section h3 {
-      font-size: 1.05rem;
+    /* ── POLICY CONTENT ── */
+    .policy-content section {
+      margin-bottom: 5rem;
+      scroll-margin-top: 120px;
+    }
+
+    .policy-content h2 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.8rem;
+      color: var(--blue-primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--blue-light);
+    }
+
+    .policy-content h3 {
+      font-size: 1.1rem;
+      color: var(--oxblood);
+      margin: 2rem 0 1rem;
       font-weight: 700;
-      color: var(--green-mid);
-      margin: 1.5rem 0 0.75rem;
     }
 
-    .policy-section p {
-      font-size: 0.95rem;
-      color: var(--text-dark);
-      margin-bottom: 1rem;
+    .policy-content p {
+      margin-bottom: 1.2rem;
+      color: var(--text-main);
     }
 
-    .policy-section ul, .policy-section ol {
-      margin: 1rem 0 1rem 1.5rem;
-      font-size: 0.95rem;
-      color: var(--text-dark);
+    .policy-content ul {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
     }
 
-    .policy-section li {
-      margin-bottom: 0.6rem;
+    .policy-content li {
+      margin-bottom: 0.8rem;
+      position: relative;
+    }
+
+    .policy-content strong {
+      color: var(--blue-primary);
     }
 
     /* ── FOOTER ── */
     footer {
-      background: var(--green-deep);
-      padding: 3rem 8% 1.5rem;
-      border-top: 1px solid var(--border);
+      background: var(--blue-primary);
+      color: rgba(255,255,255,0.6);
+      padding: 6rem 8% 2rem;
     }
 
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 4rem;
     }
 
-    .footer-links a {
-      font-size: 0.85rem;
-      color: rgba(245,240,232,0.6);
-      text-decoration: none;
-      transition: color 0.2s;
+    .footer-brand .logo { color: var(--white); margin-bottom: 1.5rem; display: inline-block; }
+    .footer-brand p { max-width: 300px; font-size: 0.95rem; line-height: 1.8; }
+
+    .footer-col h5 {
+      color: var(--white);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 1.5rem;
     }
 
-    .footer-links a:hover { color: var(--gold); }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 0.8rem; }
+    .footer-links a { color: inherit; text-decoration: none; transition: var(--transition); }
+    .footer-links a:hover { color: var(--white); padding-left: 5px; }
 
     .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 2rem;
       text-align: center;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(201,168,76,0.1);
-      font-size: 0.78rem;
-      color: rgba(245,240,232,0.35);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 992px) {
+      .content-wrapper { grid-template-columns: 1fr; }
+      .sidebar-nav { display: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 768px) {
-      .policy-container { padding: 8rem 4% 3rem; }
-      .policy-header h1 { font-size: 1.6rem; }
-      .policy-section h2 { font-size: 1.2rem; }
+      .page-header h1 { font-size: 2.2rem; }
+      .footer-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
+  <!-- NAVIGATION -->
   <nav>
     <a href="index.html" class="logo">Link<span>rite</span></a>
     <ul class="nav-links">
@@ -184,165 +285,198 @@
     </ul>
   </nav>
 
-  <!-- POLICY CONTENT -->
-  <div class="policy-container">
-    <div class="policy-header">
-      <h1>Privacy Policy</h1>
-      <p>Effective Date: May 1, 2026 | Last Updated: May 4, 2026</p>
-    </div>
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <h1>Privacy Policy</h1>
+    <p>Effective Date: May 1, 2026 | Last Updated: May 4, 2026</p>
+  </header>
 
-    <div class="policy-section">
-      <h2>1. Introduction</h2>
-      <p>At Linkrite ("we," "us," "our," or "Company"), we are committed to protecting your privacy and ensuring you have a positive experience on our website and when using our services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services.</p>
-    </div>
-
-    <div class="policy-section">
-      <h2>2. Information We Collect</h2>
-      <h3>2.1 Information You Provide</h3>
-      <p>We collect information that you voluntarily provide to us, including:</p>
-      <ul>
-        <li>Name, email address, and phone number through service request forms</li>
-        <li>Project details, manuscript files, research data, and other documents you submit</li>
-        <li>Payment information (processed securely through third-party providers)</li>
-        <li>Communication preferences and feedback</li>
-        <li>Information from consultation bookings and appointment scheduling</li>
+  <!-- MAIN CONTENT -->
+  <div class="content-wrapper">
+    <!-- SIDEBAR NAV -->
+    <aside class="sidebar-nav">
+      <h4>Sections</h4>
+      <ul class="sidebar-links">
+        <li><a href="#introduction" class="active">1. Introduction</a></li>
+        <li><a href="#collection">2. Data Collection</a></li>
+        <li><a href="#usage">3. Data Usage</a></li>
+        <li><a href="#security">4. Security</a></li>
+        <li><a href="#sharing">5. Third-Party Sharing</a></li>
+        <li><a href="#rights">6. Your Rights</a></li>
+        <li><a href="#retention">7. Data Retention</a></li>
+        <li><a href="#cookies">8. Cookies</a></li>
+        <li><a href="#contact">12. Contact Us</a></li>
       </ul>
+    </aside>
 
-      <h3>2.2 Information Collected Automatically</h3>
-      <p>When you visit our website, we automatically collect certain information:</p>
-      <ul>
-        <li>Device information (browser type, operating system, device identifiers)</li>
-        <li>IP address and approximate location (city/region level)</li>
-        <li>Pages visited, time spent on pages, and click patterns</li>
-        <li>Referral source and exit pages</li>
-        <li>Cookies and similar tracking technologies</li>
-      </ul>
-    </div>
+    <!-- POLICY CONTENT -->
+    <main class="policy-content">
+      <section id="introduction">
+        <h2>1. Introduction</h2>
+        <p>At Linkrite ("we," "us," "our," or "Company"), we are committed to protecting your privacy and ensuring you have a positive experience on our website and when using our services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services.</p>
+      </section>
 
-    <div class="policy-section">
-      <h2>3. How We Use Your Information</h2>
-      <p>We use collected information for the following purposes:</p>
-      <ul>
-        <li>Providing and delivering our services (editing, analysis, consulting, etc.)</li>
-        <li>Processing service requests and managing client relationships</li>
-        <li>Sending confirmations, invoices, and receipt notifications</li>
-        <li>Responding to inquiries and providing customer support</li>
-        <li>Sending newsletters and marketing communications (with your consent)</li>
-        <li>Improving our website functionality and user experience</li>
-        <li>Complying with legal obligations and enforcing our terms</li>
-        <li>Detecting and preventing fraud or security threats</li>
-      </ul>
-    </div>
+      <section id="collection">
+        <h2>2. Information We Collect</h2>
+        <h3>2.1 Information You Provide</h3>
+        <p>We collect information that you voluntarily provide to us, including:</p>
+        <ul>
+          <li>Name, email address, and phone number through service request forms</li>
+          <li>Project details, manuscript files, research data, and other documents you submit</li>
+          <li>Payment information (processed securely through third-party providers)</li>
+          <li>Communication preferences and feedback</li>
+        </ul>
 
-    <div class="policy-section">
-      <h2>4. Data Security & Confidentiality</h2>
-      <p>Your privacy and data security are paramount to us. We implement the following measures:</p>
-      <ul>
-        <li><strong>Encrypted Communication:</strong> SSL/TLS encryption for all data transmitted to and from our servers</li>
-        <li><strong>Secure Storage:</strong> Research data, manuscripts, and sensitive files are stored on secured, password-protected systems</li>
-        <li><strong>Access Controls:</strong> Only authorized personnel with a legitimate need-to-know have access to client data</li>
-        <li><strong>Non-Disclosure:</strong> All team members sign strict confidentiality agreements</li>
-        <li><strong>NDA Policy:</strong> Upon request, we provide comprehensive Non-Disclosure Agreements for added protection</li>
-        <li><strong>Regular Audits:</strong> We conduct security assessments and vulnerability scans to identify and address potential risks</li>
-      </ul>
-    </div>
+        <h3>2.2 Information Collected Automatically</h3>
+        <p>When you visit our website, we automatically collect certain information:</p>
+        <ul>
+          <li>Device information (browser type, operating system, device identifiers)</li>
+          <li>IP address and approximate location (city/region level)</li>
+          <li>Pages visited, time spent on pages, and click patterns</li>
+          <li>Referral source and exit pages</li>
+        </ul>
+      </section>
 
-    <div class="policy-section">
-      <h2>5. Third-Party Sharing</h2>
-      <p>We do not sell, rent, or share your personal data with third parties except in the following circumstances:</p>
-      <ul>
-        <li><strong>Service Providers:</strong> Payment processors, email delivery systems, and hosting providers (under strict data processing agreements)</li>
-        <li><strong>Legal Compliance:</strong> When required by law, court order, or regulatory authority</li>
-        <li><strong>Business Partners:</strong> With your explicit consent, we may share de-identified or anonymized data</li>
-        <li><strong>Website Analytics:</strong> We use tools like Google Analytics (anonymized IP addresses) to understand usage patterns</li>
-      </ul>
-    </div>
+      <section id="usage">
+        <h2>3. How We Use Your Information</h2>
+        <p>We use collected information for the following purposes:</p>
+        <ul>
+          <li>Providing and delivering our services (editing, analysis, consulting, etc.)</li>
+          <li>Processing service requests and managing client relationships</li>
+          <li>Sending confirmations, invoices, and receipt notifications</li>
+          <li>Responding to inquiries and providing customer support</li>
+          <li>Improving our website functionality and user experience</li>
+          <li>Complying with legal obligations and enforcing our terms</li>
+        </ul>
+      </section>
 
-    <div class="policy-section">
-      <h2>6. Your Rights & Choices</h2>
-      <h3>6.1 Access & Portability</h3>
-      <p>You have the right to request a copy of the personal data we hold about you in a portable format.</p>
+      <section id="security">
+        <h2>4. Data Security & Confidentiality</h2>
+        <p>Your privacy and data security are paramount to us. We implement the following measures:</p>
+        <ul>
+          <li><strong>Encrypted Communication:</strong> SSL/TLS encryption for all data transmitted to and from our servers</li>
+          <li><strong>Secure Storage:</strong> Research data, manuscripts, and sensitive files are stored on secured, password-protected systems</li>
+          <li><strong>Access Controls:</strong> Only authorized personnel with a legitimate need-to-know have access to client data</li>
+          <li><strong>Non-Disclosure:</strong> All team members sign strict confidentiality agreements</li>
+          <li><strong>NDA Policy:</strong> Upon request, we provide comprehensive Non-Disclosure Agreements for added protection</li>
+        </ul>
+      </section>
 
-      <h3>6.2 Correction & Deletion</h3>
-      <p>You may request that we correct inaccurate information or delete your personal data, subject to legal retention requirements.</p>
+      <section id="sharing">
+        <h2>5. Third-Party Sharing</h2>
+        <p>We do not sell, rent, or share your personal data with third parties except in the following circumstances:</p>
+        <ul>
+          <li><strong>Service Providers:</strong> Payment processors, email delivery systems, and hosting providers</li>
+          <li><strong>Legal Compliance:</strong> When required by law, court order, or regulatory authority</li>
+          <li><strong>Website Analytics:</strong> We use tools like Google Analytics to understand usage patterns</li>
+        </ul>
+      </section>
 
-      <h3>6.3 Opt-Out of Marketing</h3>
-      <p>You can unsubscribe from marketing emails at any time by clicking "Unsubscribe" in the email footer or by contacting us directly.</p>
+      <section id="rights">
+        <h2>6. Your Rights & Choices</h2>
+        <h3>6.1 Access & Portability</h3>
+        <p>You have the right to request a copy of the personal data we hold about you in a portable format.</p>
 
-      <h3>6.4 Cookie Preferences</h3>
-      <p>Most browsers allow you to control cookies through settings. You can clear cookies or disable them, though some functionality may be affected.</p>
-    </div>
+        <h3>6.2 Correction & Deletion</h3>
+        <p>You may request that we correct inaccurate information or delete your personal data, subject to legal retention requirements.</p>
 
-    <div class="policy-section">
-      <h2>7. Data Retention</h2>
-      <p>We retain your information for as long as necessary to provide services and comply with legal obligations:</p>
-      <ul>
-        <li><strong>Client Data:</strong> Retained for 6 months to 2 years after project completion (unless you request earlier deletion)</li>
-        <li><strong>Communication Records:</strong> Retained for dispute resolution and record-keeping (up to 3 years)</li>
-        <li><strong>Marketing Lists:</strong> Retained until you unsubscribe</li>
-        <li><strong>Financial Records:</strong> Retained per accounting and tax regulations (typically 7 years)</li>
-      </ul>
-    </div>
+        <h3>6.3 Opt-Out of Marketing</h3>
+        <p>You can unsubscribe from marketing emails at any time by clicking "Unsubscribe" in the email footer.</p>
+      </section>
 
-    <div class="policy-section">
-      <h2>8. Cookies & Tracking</h2>
-      <p>Our website uses cookies and similar technologies to enhance user experience. These include:</p>
-      <ul>
-        <li><strong>Essential Cookies:</strong> Required for basic website functionality</li>
-        <li><strong>Performance Cookies:</strong> Help us understand how visitors use our site</li>
-        <li><strong>Preference Cookies:</strong> Remember your choices (language, theme preferences)</li>
-      </ul>
-      <p>You can control cookie settings through your browser. Note that disabling cookies may affect website functionality.</p>
-    </div>
+      <section id="retention">
+        <h2>7. Data Retention</h2>
+        <p>We retain your information for as long as necessary to provide services and comply with legal obligations:</p>
+        <ul>
+          <li><strong>Client Data:</strong> Retained for 6 months to 2 years after project completion</li>
+          <li><strong>Communication Records:</strong> Retained for up to 3 years</li>
+          <li><strong>Financial Records:</strong> Retained per accounting and tax regulations (typically 7 years)</li>
+        </ul>
+      </section>
 
-    <div class="policy-section">
-      <h2>9. International Data Transfers</h2>
-      <p>Your data may be transferred to, stored, and processed in countries other than your country of residence. These countries may have data protection laws that differ from your home country. By using our services, you consent to such transfers, which are made with appropriate safeguards including standard contractual clauses and adequacy decisions.</p>
-    </div>
+      <section id="cookies">
+        <h2>8. Cookies & Tracking</h2>
+        <p>Our website uses cookies and similar technologies to enhance user experience. These include:</p>
+        <ul>
+          <li><strong>Essential Cookies:</strong> Required for basic website functionality</li>
+          <li><strong>Performance Cookies:</strong> Help us understand how visitors use our site</li>
+          <li><strong>Preference Cookies:</strong> Remember your choices (language, theme preferences)</li>
+        </ul>
+      </section>
 
-    <div class="policy-section">
-      <h2>10. Children's Privacy</h2>
-      <p>Linkrite services are not intended for individuals under 18 years of age. We do not knowingly collect personal information from children under 18. If we learn we have collected information from a child under 18, we will promptly delete such information. Parents or guardians who believe their child has provided information to us should contact us immediately.</p>
-    </div>
-
-    <div class="policy-section">
-      <h2>11. California & EU Resident Rights</h2>
-      <h3>11.1 California (CCPA)</h3>
-      <p>California residents have the right to know what personal data is collected, delete personal data, opt-out of the sale of personal data, and non-discrimination for exercising their rights. Submit requests to: hello@linkrite.com</p>
-
-      <h3>11.2 European Union (GDPR)</h3>
-      <p>EU residents have the right to access, rectify, erase, restrict processing, data portability, and object to processing. We process your data based on legitimate interests, contract fulfillment, or your explicit consent. Contact us at: hello@linkrite.com</p>
-    </div>
-
-    <div class="policy-section">
-      <h2>12. Contact Us</h2>
-      <p>For questions, requests, or concerns about this Privacy Policy or our data practices:</p>
-      <ul>
-        <li><strong>Email:</strong> hello@linkrite.com</li>
-        <li><strong>Mailing Address:</strong> Linkrite HQ, [Your Address]</li>
-        <li><strong>Response Time:</strong> We respond to all requests within 30 days</li>
-      </ul>
-    </div>
-
-    <div class="policy-section">
-      <h2>13. Policy Updates</h2>
-      <p>We may update this Privacy Policy periodically to reflect changes in our practices or for other operational, legal, or regulatory reasons. We will notify you of material changes via email or by posting a notice on our website. Your continued use of our services constitutes acceptance of updated terms.</p>
-    </div>
+      <section id="contact">
+        <h2>12. Contact Us</h2>
+        <p>For questions, requests, or concerns about this Privacy Policy or our data practices:</p>
+        <ul>
+          <li><strong>Email:</strong> hello@linkrite.com</li>
+          <li><strong>Response Time:</strong> We respond to all requests within 30 days</li>
+        </ul>
+      </section>
+    </main>
   </div>
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-links">
-      <a href="about.html">About Us</a>
-      <a href="privacy-policy.html">Privacy Policy</a>
-      <a href="terms-conditions.html">Terms & Conditions</a>
-      <a href="help.html">Help</a>
-      <a href="index.html#services">Services</a>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">Link<span>rite</span></a>
+        <p>Expert academic and scientific services for researchers, students, and institutions worldwide.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul class="footer-links">
+          <li><a href="#">Manuscript Editing</a></li>
+          <li><a href="#">Statistical Analysis</a></li>
+          <li><a href="#">Data Visualization</a></li>
+          <li><a href="#">Genomic Analysis</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul class="footer-links">
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="terms-conditions.html">Terms & Conditions</a></li>
+          <li><a href="help.html">Help Center</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Support</h5>
+        <ul class="footer-links">
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Live Chat</a></li>
+        </ul>
+      </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 Linkrite.com — All rights reserved.</p>
+      <p>© 2026 Linkrite.com — All rights reserved. Professional Academic Services.</p>
     </div>
   </footer>
+
+  <script>
+    // Simple script to handle sidebar active state on scroll
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.sidebar-links a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (pageYOffset >= sectionTop - 150) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').includes(current)) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>

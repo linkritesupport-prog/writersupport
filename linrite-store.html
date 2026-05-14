@@ -4,23 +4,206 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Store — Linkrite</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <!-- Professional Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'DM Sans', sans-serif; background: #f5f0e8; color: #0e1f15; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-    h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 1rem; color: #132d1e; }
-    p { font-size: 1rem; line-height: 1.6; margin-bottom: 1rem; color: #5a7264; }
-    .back-btn { display: inline-block; margin-bottom: 2rem; padding: 0.5rem 1rem; background: #132d1e; color: #f5f0e8; text-decoration: none; border-radius: 3px; }
-    .back-btn:hover { background: #1e4a2f; }
+    :root {
+      /* Professional Color Palette: Oxblood, Blue, White */
+      --oxblood: #601010;
+      --oxblood-dark: #450a0a;
+      --blue-primary: #003366; /* Bank of America Blue */
+      --blue-secondary: #0056b3;
+      --blue-light: #f0f5ff;
+      --white: #ffffff;
+      --gray-light: #f8f9fa;
+      --gray-border: #dee2e6;
+      --text-main: #212529;
+      --text-muted: #6c757d;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--white);
+      color: var(--text-main);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      padding: 0 8%;
+      height: 80px;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--blue-primary);
+      text-decoration: none;
+    }
+    .logo span { color: #ffcc00; font-style: italic; }
+
+    .back-link {
+      color: var(--blue-primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+    .back-link:hover { color: var(--oxblood); }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 8%;
+      background: radial-gradient(circle at top right, var(--blue-light) 0%, var(--white) 100%);
+    }
+
+    .hero-card {
+      max-width: 800px;
+      text-align: center;
+      background: var(--white);
+      padding: 5rem 3rem;
+      border-radius: 24px;
+      box-shadow: 0 30px 60px rgba(0,51,102,0.08);
+      border: 1px solid var(--gray-border);
+    }
+
+    .icon-box {
+      width: 80px;
+      height: 80px;
+      background: var(--blue-light);
+      color: var(--blue-primary);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 2rem;
+    }
+
+    h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 3rem;
+      color: var(--blue-primary);
+      margin-bottom: 1.5rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.8;
+    }
+
+    .status-badge {
+      display: inline-block;
+      background: var(--oxblood);
+      color: var(--white);
+      padding: 0.5rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 2rem;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background: var(--blue-primary);
+      color: var(--white);
+    }
+    .btn-primary:hover {
+      background: var(--oxblood);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      border: 2px solid var(--blue-primary);
+      color: var(--blue-primary);
+    }
+    .btn-outline:hover {
+      background: var(--blue-light);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2rem 8%;
+      border-top: 1px solid var(--gray-border);
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.2rem; }
+      .hero-card { padding: 3rem 1.5rem; }
+      .cta-group { flex-direction: column; }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <a href="index.html" class="back-btn">← Back to Home</a>
-    <h1>Store</h1>
-    <p>Browse our collection of resources, templates, and tools for academic and professional work.</p>
-    <p><strong>Coming soon:</strong> Full store page under development.</p>
-  </div>
+
+  <nav>
+    <a href="index.html" class="logo">Link<span>rite</span></a>
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+  </nav>
+
+  <main>
+    <div class="hero-card">
+      <div class="icon-box">
+        <i class="fas fa-shopping-bag"></i>
+      </div>
+      <span class="status-badge">Coming Soon</span>
+      <h1>The Linkrite Store</h1>
+      <p>We are curating a premium collection of academic resources, research templates, and scientific tools to accelerate your professional journey.</p>
+      
+      <div class="cta-group">
+        <a href="contact.html" class="btn btn-primary">Notify Me on Launch</a>
+        <a href="servicepage.html" class="btn btn-outline">Explore Our Services</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Linkrite.com — All rights reserved. Professional Academic & Scientific Services.</p>
+  </footer>
+
 </body>
 </html>
