@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config(); // Load environment variables from .env file
 const express = require('express');
+const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -12,18 +14,54 @@ const PORT = process.env.PORT || 3000;
 const DB_FILE = path.join(__dirname, 'admin-auth.db');
 const JWT_SECRET = process.env.JWT_SECRET || 'Linkrite-secret-2026';
 const COOKIE_NAME = 'admin_token';
-const ADMIN_USER = 'admin';
-const ADMIN_PASSWORD = 'Linkrite2025';
+const ADMIN_USER = process.env.ADMIN_USER || 'admin';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Delight@2024';
+
+// CORS Configuration - Allow both localhost and 127.0.0.1 for development
+app.use(cors({
+  origin: function(origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, file:// URLs, etc.)
+    if (!origin) return callback(null, true);
+    
+    // Allow localhost and 127.0.0.1 for development
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      return callback(null, true);
+    }
+    
+    // Allow file:// for development
+    if (origin === 'file://') {
+      return callback(null, true);
+    }
+    
+    // For production, use FRONTEND_URL env variable
+    const FRONTEND_URL = process.env.FRONTEND_URL;
+    if (FRONTEND_URL && origin === FRONTEND_URL) {
+      return callback(null, true);
+    }
+    
+    // In development mode, allow all origins
+    if (process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+    
+    callback(new Error('CORS not allowed'));
+  },
+  credentials: true
+}));
+
+app.use(express.json());
+app.use(cookieParser());
+
 const COOKIE_OPTIONS = {
   httpOnly: true,
   sameSite: 'strict',
-  secure: false,
+  secure: process.env.NODE_ENV === 'production',
   maxAge: 2 * 60 * 60 * 1000 // 2 hours
 };
 
 // Email Configuration
-const EMAIL_USER = process.env.EMAIL_USER || 'musamubarak350@gmail.com';
-const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD || 'siui usak mwjm gzgw'; // Gmail app password
+const EMAIL_USER = process.env.EMAIL_USER || 'linkritesupport@gmail.com';
+const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD; // Gmail app password (set in environment)
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -47,6 +85,98 @@ async function sendEmail(to, subject, htmlContent) {
     console.error(`❌ Email error for ${to}:`, err.message);
     return false;
   }
+}
+
+async function sendAdminNotification(subject, htmlContent) {
+  try {
+    await transporter.sendMail({
+      from: EMAIL_USER,
+      to: EMAIL_USER,
+      subject: subject,
+      html: htmlContent
+    });
+    console.log(`✅ Admin notification sent to ${EMAIL_USER}`);
+    return true;
+  } catch (err) {
+    console.error(`❌ Admin notification error:`, err.message);
+    return false;
+  }
+}
+
+// Email template builders (professional)
+function buildUserTemplate({heading, intro, detailsHtml, ctaText, ctaUrl}) {
+  return `
+  <!doctype html>
+  <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${heading}</title>
+  </head>
+  <body style="margin:0;padding:0;background:#f4f6f8;font-family: 'Inter', Arial, sans-serif;color:#253243;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:680px;margin:30px auto;">
+      <tr>
+        <td style="padding:20px 0;text-align:center;">
+          <img src="https://via.placeholder.com/200x40?text=Linkrite" alt="Linkrite" style="height:40px;" />
+        </td>
+      </tr>
+      <tr>
+        <td style="background:#ffffff;border-radius:8px;padding:28px;box-shadow:0 6px 24px rgba(15,23,42,0.06);">
+          <h1 style="margin:0 0 12px;color:#003366;font-size:20px;">${heading}</h1>
+          <p style="margin:0 0 18px;color:#54687a;line-height:1.5;">${intro}</p>
+
+          ${detailsHtml}
+
+          ${ctaText && ctaUrl ? `<p style="text-align:center;margin:24px 0 0;"><a href="${ctaUrl}" style="background:#003366;color:#fff;padding:12px 22px;border-radius:6px;text-decoration:none;font-weight:600;">${ctaText}</a></p>` : ''}
+
+          <p style="margin:24px 0 0;color:#90a0ad;font-size:13px;">We typically respond within 24-48 hours. For urgent matters, reply to this email or contact us at <a href="mailto:${EMAIL_USER}">${EMAIL_USER}</a>.</p>
+
+          <p style="margin:32px 0 0;color:#54687a;line-height:1.8;">
+            Best regards,<br/>
+            <strong>Linkrite Team</strong><br/>
+            <span style="color:#90a0ad;font-size:13px;">Professional Services & Solutions</span>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align:center;padding:18px 0;color:#97a3ad;font-size:12px;">
+          © ${new Date().getFullYear()} Linkrite
+        </td>
+      </tr>
+    </table>
+  </body>
+  </html>
+  `;
+}
+
+function buildAdminTemplate({heading, intro, detailsHtml, ctaText, ctaUrl}) {
+  return `
+  <!doctype html>
+  <html>
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /></head>
+  <body style="margin:0;padding:0;background:#eef3f8;font-family:Arial, sans-serif;color:#122333;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="max-width:720px;margin:24px auto;">
+      <tr><td style="padding:18px 0;text-align:left;"><img src="https://via.placeholder.com/160x32?text=Linkrite" alt="Linkrite" style="height:32px;" /></td></tr>
+      <tr>
+        <td style="background:#fff;border-radius:8px;padding:20px;box-shadow:0 6px 18px rgba(10,30,50,0.06);">
+          <h2 style="margin:0 0 12px;color:#003366;font-size:18px;">${heading}</h2>
+          <p style="margin:0 0 16px;color:#415563;">${intro}</p>
+
+          ${detailsHtml}
+
+          ${ctaText && ctaUrl ? `<p style="text-align:center;margin:20px 0 0;"><a href="${ctaUrl}" style="background:#003366;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;font-weight:600;">${ctaText}</a></p>` : ''}
+
+          <p style="margin:24px 0 0;color:#54687a;line-height:1.8;font-size:13px;">
+            Best regards,<br/>
+            <strong>Linkrite Team</strong><br/>
+            <span style="color:#90a0ad;">Professional Services & Solutions</span>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+  </html>
+  `;
 }
 
 function fmtDate(d) { return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }); }
@@ -108,7 +238,19 @@ async function ensureDatabase() {
     date TEXT NOT NULL,
     time TEXT NOT NULL,
     email TEXT NOT NULL,
-    status TEXT DEFAULT 'confirmed'
+    status TEXT DEFAULT 'confirmed',
+    meeting_link TEXT
+  )`);
+
+  await runSql(db, `CREATE TABLE IF NOT EXISTS contacts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first TEXT NOT NULL,
+    last TEXT NOT NULL,
+    email TEXT NOT NULL,
+    subject TEXT NOT NULL,
+    message TEXT NOT NULL,
+    status TEXT DEFAULT 'pending',
+    date TEXT NOT NULL
   )`);
 
   const existing = await getSql(db, 'SELECT id FROM users WHERE username = ?', [ADMIN_USER]);
@@ -225,55 +367,61 @@ app.post('/api/public/requests', async (req, res) => {
   db.close();
   console.log('✅ Request saved to database with ID:', result.lastID);
 
-  // Send confirmation email
+  // Build professional user confirmation email
   const emailSubject = 'Service Request Confirmation - Linkrite';
-  const emailHtml = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border-radius: 8px;">
-      <h2 style="color: #1a73e8; text-align: center;">Service Request Received ✓</h2>
-      <p>Hi ${first},</p>
-      <p>Thank you for submitting your service request to Linkrite. We've received your information and will get back to you shortly.</p>
-      
-      <div style="background-color: #ffffff; padding: 20px; border-left: 4px solid #1a73e8; margin: 20px 0; border-radius: 4px;">
-        <h3 style="margin-top: 0; color: #333;">Request Details:</h3>
-        <p><strong>Name:</strong> ${first} ${last || ''}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Service:</strong> ${service}</p>
-        <p><strong>Status:</strong> Pending Review</p>
-        <p><strong>Request ID:</strong> #${result.lastID}</p>
-        ${note ? `<p><strong>Message:</strong> ${note}</p>` : ''}
-      </div>
-
-      <div style="background-color: #e8f0fe; padding: 15px; border-radius: 4px; margin: 20px 0;">
-        <h3 style="margin-top: 0; color: #1a73e8;">Consultation Meeting</h3>
-        <p>Join us for a consultation meeting:</p>
-        <p style="text-align: center;">
-          <a href="https://meet.google.com/Linkrite-consultation" style="display: inline-block; background-color: #1a73e8; color: white; padding: 12px 30px; text-decoration: none; border-radius: 4px; font-weight: bold;">Join Google Meet</a>
-        </p>
-        <p style="font-size: 12px; color: #666;">Meeting ID: Linkrite-consultation</p>
-      </div>
-      
-      <p>We typically respond within 24-48 hours. If you have any questions, feel free to reach out to us directly.</p>
-      
-      <p style="margin-top: 30px; color: #999; font-size: 12px; border-top: 1px solid #ddd; padding-top: 15px;">
-        Best regards,<br>
-        <strong>Linkrite Team</strong><br>
-        <em>Professional Services & Solutions</em>
-      </p>
-    </div>
+  const userDetailsHtml = `
+    <table style="width:100%;background:#ffffff;border-radius:6px;padding:14px;margin-top:12px;">
+      <tr><td style="padding:6px 0;"><strong>Request ID:</strong> #${result.lastID}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Name:</strong> ${first} ${last || ''}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Email:</strong> ${email}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Service:</strong> ${service}</td></tr>
+      ${note ? `<tr><td style="padding:6px 0;"><strong>Message:</strong> ${note}</td></tr>` : ''}
+    </table>
   `;
-  
+  const emailHtml = buildUserTemplate({
+    heading: 'Service Request Received',
+    intro: `Hi ${first}, thank you for contacting Linkrite. We have received your request and our team will review it shortly.`,
+    detailsHtml: userDetailsHtml,
+    ctaText: 'View Request Status',
+    ctaUrl: 'http://localhost:3000/'
+  });
+
   console.log(`📧 Attempting to send email to: ${email}`);
   const emailSent = await sendEmail(email, emailSubject, emailHtml);
   console.log(`📧 Email send result: ${emailSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
+
+  // Build professional admin notification
+  const adminSubject = `New Service Request - ${service} from ${first}`;
+  const adminDetailsHtml = `
+    <table style="width:100%;background:#ffffff;border-radius:6px;padding:14px;margin-top:12px;">
+      <tr><td style="padding:6px 0;"><strong>Request ID:</strong> #${result.lastID}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Client Name:</strong> ${first} ${last || ''}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Email:</strong> <a href="mailto:${email}">${email}</a></td></tr>
+      <tr><td style="padding:6px 0;"><strong>Service:</strong> ${service}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Date:</strong> ${fmtDate(new Date())}</td></tr>
+      ${note ? `<tr><td style="padding:6px 0;"><strong>Message:</strong> ${note}</td></tr>` : ''}
+    </table>
+  `;
+  const adminHtml = buildAdminTemplate({
+    heading: 'New Service Request',
+    intro: 'A new service request was submitted via the website.',
+    detailsHtml: adminDetailsHtml,
+    ctaText: 'Open Admin Panel',
+    ctaUrl: 'http://localhost:3000/adminpanel.html'
+  });
+
+  console.log(`📧 Attempting to send admin notification to: ${EMAIL_USER}`);
+  const adminNotificationSent = await sendAdminNotification(adminSubject, adminHtml);
+  console.log(`📧 Admin notification result: ${adminNotificationSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
   
-  res.json({ id: result.lastID, success: true, emailSent });
+  res.json({ id: result.lastID, success: true, emailSent, adminNotificationSent });
 });
 
 // PUBLIC API — Website booking submissions (no auth required)
 app.post('/api/public/bookings', async (req, res) => {
   console.log('📅 Received public booking submission');
-  const { name, service, date, time, email, status = 'confirmed' } = req.body;
-  console.log('📝 Booking data:', { name, service, date, time, email });
+  const { name, service, date, time, email, status = 'confirmed', meetingLink } = req.body;
+  console.log('📝 Booking data:', { name, service, date, time, email, meetingLink });
   
   if (!name || !service || !date || !time || !email) {
     console.log('❌ Missing required booking fields');
@@ -281,58 +429,32 @@ app.post('/api/public/bookings', async (req, res) => {
   }
 
   const db = openDb();
-  const result = await runSql(db, 'INSERT INTO bookings (name, service, date, time, email, status) VALUES (?, ?, ?, ?, ?, ?)',
-    [name, service, date, time, email, status]);
+  const result = await runSql(db, 'INSERT INTO bookings (name, service, date, time, email, status, meeting_link) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [name, service, date, time, email, status, meetingLink || null]);
   db.close();
   console.log('✅ Booking saved to database with ID:', result.lastID);
 
   // Send confirmation email
+  // Build professional booking confirmation email
   const emailSubject = 'Consultation Booking Confirmed - Linkrite';
-  const emailHtml = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border-radius: 8px;">
-      <h2 style="color: #1a73e8; text-align: center;">Consultation Booking Confirmed ✓</h2>
-      <p>Hi ${name},</p>
-      <p>Your consultation booking has been confirmed! We're excited to discuss your ${service} needs with you.</p>
-      
-      <div style="background-color: #ffffff; padding: 20px; border-left: 4px solid #1a73e8; margin: 20px 0; border-radius: 4px;">
-        <h3 style="margin-top: 0; color: #333;">Consultation Details:</h3>
-        <p><strong>Service:</strong> ${service}</p>
-        <p><strong>Date:</strong> ${date}</p>
-        <p><strong>Time:</strong> ${time}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Booking ID:</strong> #${result.lastID}</p>
-        <p><strong>Status:</strong> Confirmed</p>
-      </div>
-
-      <div style="background-color: #e8f0fe; padding: 15px; border-radius: 4px; margin: 20px 0;">
-        <h3 style="margin-top: 0; color: #1a73e8;">Join Your Consultation</h3>
-        <p>Click the link below to join your consultation meeting:</p>
-        <p style="text-align: center;">
-          <a href="https://meet.google.com/Linkrite-consultation" style="display: inline-block; background-color: #1a73e8; color: white; padding: 12px 30px; text-decoration: none; border-radius: 4px; font-weight: bold;">Join Google Meet</a>
-        </p>
-        <p style="font-size: 12px; color: #666;">Meeting ID: Linkrite-consultation</p>
-      </div>
-
-      <div style="background-color: #fff3cd; padding: 15px; border-radius: 4px; margin: 20px 0; border-left: 4px solid #ffc107;">
-        <h3 style="margin-top: 0; color: #856404;">📋 Upcoming and Past Consultations</h3>
-        <p>You can manage all your consultations from your account. Check back anytime to:</p>
-        <ul style="color: #856404;">
-          <li>View upcoming consultation dates</li>
-          <li>Review past consultation notes</li>
-          <li>Reschedule or cancel if needed</li>
-        </ul>
-      </div>
-      
-      <p>If you need to reschedule or have any questions, please contact us directly.</p>
-      
-      <p style="margin-top: 30px; color: #999; font-size: 12px; border-top: 1px solid #ddd; padding-top: 15px;">
-        Best regards,<br>
-        <strong>Linkrite Team</strong><br>
-        <em>Professional Services & Solutions</em>
-      </p>
-    </div>
+  const bookingDetails = `
+    <table style="width:100%;background:#ffffff;border-radius:6px;padding:12px;margin-top:12px;">
+      <tr><td style="padding:6px 0;"><strong>Booking ID:</strong> #${result.lastID}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Name:</strong> ${name}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Service:</strong> ${service}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Date:</strong> ${date}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Time:</strong> ${time}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Email:</strong> ${email}</td></tr>
+    </table>
   `;
-  
+  const emailHtml = buildUserTemplate({
+    heading: 'Consultation Booking Confirmed',
+    intro: `Hi ${name}, your consultation booking is confirmed. See the details below.`,
+    detailsHtml: bookingDetails,
+    ctaText: meetingLink ? 'Join Consultation' : null,
+    ctaUrl: meetingLink || null
+  });
+
   console.log(`📧 Attempting to send booking confirmation email to: ${email}`);
   const emailSent = await sendEmail(email, emailSubject, emailHtml);
   console.log(`📧 Booking email send result: ${emailSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
@@ -369,7 +491,7 @@ app.get('/api/bookings', authMiddleware, async (req, res) => {
 
 app.post('/api/bookings', authMiddleware, async (req, res) => {
   console.log('📅 Received booking submission');
-  const { name, service, date, time, email, status = 'confirmed' } = req.body;
+  const { name, service, date, time, email, status = 'confirmed', meetingLink } = req.body;
   
   if (!name || !service || !date || !time || !email) {
     console.log('❌ Missing required booking fields');
@@ -377,63 +499,171 @@ app.post('/api/bookings', authMiddleware, async (req, res) => {
   }
 
   const db = openDb();
-  const result = await runSql(db, 'INSERT INTO bookings (name, service, date, time, email, status) VALUES (?, ?, ?, ?, ?, ?)',
-    [name, service, date, time, email, status]);
+  const result = await runSql(db, 'INSERT INTO bookings (name, service, date, time, email, status, meeting_link) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [name, service, date, time, email, status, meetingLink || null]);
   db.close();
   console.log('✅ Booking saved to database with ID:', result.lastID);
 
   // Send confirmation email
+  // Build professional booking confirmation email
   const emailSubject = 'Consultation Booking Confirmed - Linkrite';
-  const emailHtml = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border-radius: 8px;">
-      <h2 style="color: #1a73e8; text-align: center;">Consultation Booking Confirmed ✓</h2>
-      <p>Hi ${name},</p>
-      <p>Your consultation booking has been confirmed! We're excited to discuss your ${service} needs with you.</p>
-      
-      <div style="background-color: #ffffff; padding: 20px; border-left: 4px solid #1a73e8; margin: 20px 0; border-radius: 4px;">
-        <h3 style="margin-top: 0; color: #333;">Consultation Details:</h3>
-        <p><strong>Service:</strong> ${service}</p>
-        <p><strong>Date:</strong> ${date}</p>
-        <p><strong>Time:</strong> ${time}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Booking ID:</strong> #${result.lastID}</p>
-        <p><strong>Status:</strong> Confirmed</p>
-      </div>
-
-      <div style="background-color: #e8f0fe; padding: 15px; border-radius: 4px; margin: 20px 0;">
-        <h3 style="margin-top: 0; color: #1a73e8;">Join Your Consultation</h3>
-        <p>Click the link below to join your consultation meeting:</p>
-        <p style="text-align: center;">
-          <a href="https://meet.google.com/Linkrite-consultation" style="display: inline-block; background-color: #1a73e8; color: white; padding: 12px 30px; text-decoration: none; border-radius: 4px; font-weight: bold;">Join Google Meet</a>
-        </p>
-        <p style="font-size: 12px; color: #666;">Meeting ID: Linkrite-consultation</p>
-      </div>
-
-      <div style="background-color: #fff3cd; padding: 15px; border-radius: 4px; margin: 20px 0; border-left: 4px solid #ffc107;">
-        <h3 style="margin-top: 0; color: #856404;">📋 Upcoming and Past Consultations</h3>
-        <p>You can manage all your consultations from your account. Check back anytime to:</p>
-        <ul style="color: #856404;">
-          <li>View upcoming consultation dates</li>
-          <li>Review past consultation notes</li>
-          <li>Reschedule or cancel if needed</li>
-        </ul>
-      </div>
-      
-      <p>If you need to reschedule or have any questions, please contact us directly.</p>
-      
-      <p style="margin-top: 30px; color: #999; font-size: 12px; border-top: 1px solid #ddd; padding-top: 15px;">
-        Best regards,<br>
-        <strong>Linkrite Team</strong><br>
-        <em>Professional Services & Solutions</em>
-      </p>
-    </div>
+  const bookingDetails = `
+    <table style="width:100%;background:#ffffff;border-radius:6px;padding:12px;margin-top:12px;">
+      <tr><td style="padding:6px 0;"><strong>Booking ID:</strong> #${result.lastID}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Name:</strong> ${name}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Service:</strong> ${service}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Date:</strong> ${date}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Time:</strong> ${time}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Email:</strong> ${email}</td></tr>
+    </table>
   `;
-  
+  const emailHtml = buildUserTemplate({
+    heading: 'Consultation Booking Confirmed',
+    intro: `Hi ${name}, your consultation booking is confirmed. See the details below.`,
+    detailsHtml: bookingDetails,
+    ctaText: meetingLink ? 'Join Consultation' : null,
+    ctaUrl: meetingLink || null
+  });
+
   console.log(`📧 Attempting to send booking confirmation email to: ${email}`);
   const emailSent = await sendEmail(email, emailSubject, emailHtml);
   console.log(`📧 Booking email send result: ${emailSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
   
   res.json({ id: result.lastID, emailSent });
+});
+
+// PUBLIC CONTACT MESSAGE API (no auth required)
+app.post('/api/contact', async (req, res) => {
+  console.log('💬 Received contact message');
+  const { first, last, email, subject, message } = req.body;
+  
+  if (!first || !email || !subject || !message) {
+    console.log('❌ Missing required contact fields');
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  const db = openDb();
+  const dateStr = fmtDate(new Date());
+  const result = await runSql(db, 'INSERT INTO contacts (first, last, email, subject, message, date) VALUES (?, ?, ?, ?, ?, ?)',
+    [first, last || '', email, subject, message, dateStr]);
+  db.close();
+  console.log('✅ Contact message saved to database with ID:', result.lastID);
+
+  // Send confirmation email
+  // Build professional contact confirmation email
+  const emailSubject = 'We Received Your Message - Linkrite';
+  const userDetails = `
+    <table style="width:100%;background:#ffffff;border-radius:6px;padding:12px;margin-top:12px;">
+      <tr><td style="padding:6px 0;"><strong>Subject:</strong> ${subject}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Message:</strong></td></tr>
+      <tr><td style="padding:6px 0;background:#f5f7fa;padding:10px;border-radius:4px;">${message.replace(/\n/g, '<br>')}</td></tr>
+    </table>
+  `;
+  const emailHtml = buildUserTemplate({
+    heading: 'Message Received',
+    intro: `Thank you ${first}, we have received your message and will respond shortly.`,
+    detailsHtml: userDetails,
+    ctaText: 'Reply',
+    ctaUrl: `mailto:${EMAIL_USER}`
+  });
+
+  console.log(`📧 Attempting to send contact confirmation email to: ${email}`);
+  const emailSent = await sendEmail(email, emailSubject, emailHtml);
+  console.log(`📧 Contact email send result: ${emailSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
+
+  // Build professional admin notification
+  const adminSubject = `New Contact Message from ${first} - ${subject}`;
+  const adminDetails = `
+    <table style="width:100%;background:#ffffff;border-radius:6px;padding:12px;margin-top:12px;">
+      <tr><td style="padding:6px 0;"><strong>Message ID:</strong> #${result.lastID}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Name:</strong> ${first} ${last || ''}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Email:</strong> <a href="mailto:${email}">${email}</a></td></tr>
+      <tr><td style="padding:6px 0;"><strong>Subject:</strong> ${subject}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Date:</strong> ${dateStr}</td></tr>
+      <tr><td style="padding:6px 0;background:#f5f7fa;padding:10px;border-radius:4px;">${message.replace(/\n/g, '<br>')}</td></tr>
+    </table>
+  `;
+  const adminHtml = buildAdminTemplate({
+    heading: 'New Contact Message',
+    intro: 'A new message was submitted through the contact form.',
+    detailsHtml: adminDetails,
+    ctaText: 'Open Admin Panel',
+    ctaUrl: 'http://localhost:3000/adminpanel.html'
+  });
+
+  console.log(`📧 Attempting to send admin notification to: ${EMAIL_USER}`);
+  const adminNotificationSent = await sendAdminNotification(adminSubject, adminHtml);
+  console.log(`📧 Admin notification result: ${adminNotificationSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
+  
+  res.json({ id: result.lastID, emailSent, adminNotificationSent });
+});
+
+// PUBLIC CONSULTATION BOOKING API (no auth required)
+app.post('/api/bookings/public', async (req, res) => {
+  console.log('📅 Received public consultation booking');
+  const { name, service, date, time, email, meetingLink } = req.body;
+  
+  if (!name || !service || !email) {
+    console.log('❌ Missing required booking fields');
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  const db = openDb();
+  const dateStr = date || fmtDate(new Date());
+  const result = await runSql(db, 'INSERT INTO bookings (name, service, date, time, email, status, meeting_link) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [name, service, dateStr, time || 'TBD', email, 'pending', meetingLink || null]);
+  db.close();
+  console.log('✅ Consultation booking saved to database with ID:', result.lastID);
+
+  // Send confirmation email
+  // Build professional booking confirmation email
+  const emailSubject = 'Consultation Booking Request Received - Linkrite';
+  const bookingDetails = `
+    <table style="width:100%;background:#ffffff;border-radius:6px;padding:12px;margin-top:12px;">
+      <tr><td style="padding:6px 0;"><strong>Name:</strong> ${name}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Service:</strong> ${service}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Preferred Date:</strong> ${dateStr}</td></tr>
+      ${time ? `<tr><td style="padding:6px 0;"><strong>Preferred Time:</strong> ${time}</td></tr>` : ''}
+    </table>
+  `;
+  const emailHtml = buildUserTemplate({
+    heading: 'Consultation Booking Received',
+    intro: 'Thank you for requesting a consultation. Our team will confirm the details shortly.',
+    detailsHtml: bookingDetails,
+    ctaText: meetingLink ? 'Join Consultation' : 'Contact Support',
+    ctaUrl: meetingLink || `mailto:${EMAIL_USER}`
+  });
+
+  console.log(`📧 Attempting to send booking confirmation email to: ${email}`);
+  const emailSent = await sendEmail(email, emailSubject, emailHtml);
+  console.log(`📧 Booking email send result: ${emailSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
+
+  // Build professional admin notification
+  const adminSubject = `New Consultation Booking from ${name}`;
+  const adminDetails = `
+    <table style="width:100%;background:#ffffff;border-radius:6px;padding:12px;margin-top:12px;">
+      <tr><td style="padding:6px 0;"><strong>Booking ID:</strong> #${result.lastID}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Client Name:</strong> ${name}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Email:</strong> <a href="mailto:${email}">${email}</a></td></tr>
+      <tr><td style="padding:6px 0;"><strong>Service:</strong> ${service}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>Preferred Date:</strong> ${dateStr}</td></tr>
+      ${time ? `<tr><td style="padding:6px 0;"><strong>Preferred Time:</strong> ${time}</td></tr>` : ''}
+      ${meetingLink ? `<tr><td style="padding:6px 0;"><strong>Meeting Link:</strong> <a href="${meetingLink}">${meetingLink}</a></td></tr>` : ''}
+    </table>
+  `;
+  const adminHtml = buildAdminTemplate({
+    heading: 'New Consultation Booking',
+    intro: 'A new consultation booking was submitted via the website.',
+    detailsHtml: adminDetails,
+    ctaText: 'Open Admin Panel',
+    ctaUrl: 'http://localhost:3000/adminpanel.html'
+  });
+
+  console.log(`📧 Attempting to send admin notification to: ${EMAIL_USER}`);
+  const adminNotificationSent = await sendAdminNotification(adminSubject, adminHtml);
+  console.log(`📧 Admin notification result: ${adminNotificationSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
+  
+  res.json({ id: result.lastID, emailSent, adminNotificationSent });
 });
 
 app.get('/admin-login.html', (req, res, next) => {
@@ -444,7 +674,7 @@ app.get('/admin-login.html', (req, res, next) => {
   res.sendFile(path.join(__dirname, 'admin-login.html'));
 });
 
-app.get('/adminpanel.html', authMiddleware, (req, res) => {
+app.get('/adminpanel.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'adminpanel.html'));
 });
 

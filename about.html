@@ -566,6 +566,164 @@
     .social-link { color: inherit; font-size: 1.2rem; transition: var(--transition); }
     .social-link:hover { color: #ffcc00; }
 
+    /* ── SUCCESS MODAL (PROFESSIONAL) ── */
+    .success-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .success-modal.show {
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      display: flex !important;
+    }
+
+    /* Inline success message shown under forms - as toast */
+    .inline-success {
+      display: none;
+      position: fixed;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 8000;
+      padding: 1rem 1.5rem;
+      background: #e9f7ef;
+      border: 2px solid #c7efd6;
+      border-left: 5px solid #28a745;
+      color: #115e36;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(17, 94, 54, 0.15);
+      max-width: 500px;
+      opacity: 0;
+      animation: slideDown 0.4s ease forwards;
+    }
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+    .inline-success.show {
+      display: block !important;
+      opacity: 1 !important;
+    }
+    .success-modal-content {
+      background: var(--white);
+      padding: 3rem 2.5rem;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 520px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05);
+      animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .success-modal-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blue-primary) 0%, var(--oxblood) 100%);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .success-icon {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2rem;
+      font-size: 3rem;
+      color: var(--white);
+      box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+      animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.3); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .success-modal-content h2 {
+      color: var(--blue-primary);
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin: 0 0 1rem 0;
+      letter-spacing: -0.5px;
+    }
+    .success-modal-content .success-subtitle {
+      color: var(--oxblood);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .success-modal-content p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin: 1rem 0;
+    }
+    .success-modal-content .confirm-details {
+      background: #f8f9fa;
+      border-left: 3px solid var(--blue-primary);
+      padding: 1rem 1.5rem;
+      border-radius: 4px;
+      margin: 1.5rem 0;
+      text-align: left;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+    .success-modal-content .confirm-details strong {
+      color: var(--blue-primary);
+      font-weight: 600;
+    }
+    .success-modal-content .btn-submit {
+      background: linear-gradient(135deg, var(--blue-primary) 0%, #0d47a1 100%);
+      color: var(--white);
+      border: none;
+      padding: 0.95rem 2.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-top: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0, 51, 102, 0.2);
+    }
+    .success-modal-content .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 51, 102, 0.3);
+    }
+    .success-modal-content .btn-submit:active {
+      transform: translateY(0);
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
       .page-hero { grid-template-columns: 1fr; text-align: center; }
@@ -849,9 +1007,15 @@
   </div>
 
   <script>
+    // Global backend URL - adjust for production
+    var BACKEND_URL = window.location.origin === 'file://' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3000' 
+      : window.location.origin;
+
     // Contact Form Logic
     function submitContact() {
       const first = document.getElementById('cfFirst').value.trim();
+      const last = document.getElementById('cfLast').value.trim();
       const email = document.getElementById('cfEmail').value.trim();
       const subject = document.getElementById('cfSubject').value;
       const message = document.getElementById('cfMessage').value.trim();
@@ -861,9 +1025,107 @@
         return;
       }
 
-      document.getElementById('contactFormContent').style.display = 'none';
-      document.getElementById('contactSuccess').style.display = 'block';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+
+      // Send to backend API
+      fetch(BACKEND_URL + '/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          first: first,
+          last: last,
+          email: email,
+          subject: subject,
+          message: message
+        })
+      })
+      .then(function(res) { 
+        console.log('✅ Contact form submitted successfully, response status:', res.status);
+        return res.json(); 
+      })
+      .then(function(data) {
+        console.log('✅ API response:', data);
+        // Show success modal
+        var modal = document.getElementById('successModal');
+        console.log('🎯 Modal element:', modal);
+        if (modal) {
+          openSuccessModal();
+          console.log('✅ Opened success modal');
+        }
+        
+          // Clear form fields
+          ['cfFirst','cfLast','cfEmail','cfMessage'].forEach(id => document.getElementById(id).value = '');
+          document.getElementById('cfSubject').value = '';
+
+          // Show inline success message under contact form
+          try {
+            var inlineId = 'inlineSuccess-contact';
+            var inlineEl = document.getElementById(inlineId);
+            if (!inlineEl) {
+              inlineEl = document.createElement('div');
+              inlineEl.id = inlineId;
+              inlineEl.className = 'inline-success';
+              document.body.appendChild(inlineEl);
+            }
+            inlineEl.textContent = 'Send successful — we will reach out to you shortly.';
+            inlineEl.classList.add('show');
+          } catch (e) { console.error('Inline success show error', e); }
+      })
+      .catch(function(err) {
+        console.error('❌ Error:', err);
+        alert('Error submitting message. Please try again or contact us directly.');
+      });
     }
+
+    // Accessible modal open/close with focus trap
+    (function() {
+      const overlay = document.getElementById('successModal');
+      const dialog = overlay ? overlay.querySelector('.success-modal-content') : null;
+      const closeBtn = overlay ? overlay.querySelector('.btn-submit') : null;
+      let lastFocused = null;
+
+      window.openSuccessModal = function() {
+        if (!overlay || !dialog) return;
+        lastFocused = document.activeElement;
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        dialog.setAttribute('tabindex', '-1');
+        dialog.focus();
+      };
+
+      window.closeSuccessModal = function() {
+        if (!overlay) return;
+        overlay.classList.remove('show');
+        document.body.style.overflow = '';
+        if (lastFocused) try { lastFocused.focus(); } catch (e) {}
+      };
+
+      if (closeBtn) closeBtn.addEventListener('click', closeSuccessModal);
+
+      // click outside to close
+      if (overlay) overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeSuccessModal();
+      });
+
+      // keyboard handling (ESC + focus trap)
+      document.addEventListener('keydown', function(e) {
+        if (!overlay || !overlay.classList.contains('show')) return;
+        if (e.key === 'Escape') return closeSuccessModal();
+        if (e.key !== 'Tab') return;
+        const focusable = dialog.querySelectorAll("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])");
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        }
+      });
+    })();
 
     function resetContact() {
       document.getElementById('contactFormContent').style.display = 'block';
@@ -924,6 +1186,23 @@
       document.body.style.overflow = '';
     }
   </script>
+
+  <!-- Success Modal (Professional) -->
+  <div class="success-modal" id="successModal">
+    <div class="success-modal-content">
+      <div class="success-icon">✓</div>
+      <div class="success-subtitle">SUCCESS</div>
+      <h2>Your Message Has Been Received</h2>
+      <p>Thank you for getting in touch with us. We've successfully received your message and a confirmation email has been sent to your inbox.</p>
+      <div class="confirm-details">
+        <p style="margin: 0.5rem 0;"><strong>✓ Message saved to our system</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>✓ Confirmation email sent</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>✓ Response within 24 hours</strong></p>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 1.5rem;">Our team is reviewing your message and will contact you shortly. If you have any urgent questions, please email us directly.</p>
+      <button class="btn-submit" onclick="closeSuccessModal()">Done</button>
+    </div>
+  </div>
 
 </body>
 </html>

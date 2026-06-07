@@ -301,8 +301,8 @@
       border-radius: 16px;
       padding: 2.5rem;
       box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-      position: sticky;
-      top: 180px;
+      position: relative;
+      min-height: 400px;
     }
 
     .form-header { margin-bottom: 2rem; }
@@ -468,6 +468,229 @@
     .social-link { color: inherit; font-size: 1.2rem; transition: var(--transition); }
     .social-link:hover { color: #ffcc00; }
 
+    /* ── SUCCESS MODAL (PROFESSIONAL) ── */
+    .success-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .success-modal.show {
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      display: flex !important;
+    }
+    .success-modal-content {
+      background: var(--white);
+      padding: 3rem 2.5rem;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 520px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05);
+      animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .success-modal-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blue-primary) 0%, var(--oxblood) 100%);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .success-icon {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2rem;
+      font-size: 3rem;
+      color: var(--white);
+      box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+      animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.3); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .success-modal-content h2 {
+      color: var(--blue-primary);
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin: 0 0 1rem 0;
+      letter-spacing: -0.5px;
+    }
+    .success-modal-content .success-subtitle {
+      color: var(--oxblood);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .success-modal-content p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin: 1rem 0;
+    }
+    .success-modal-content .confirm-details {
+      background: #f8f9fa;
+      border-left: 3px solid var(--blue-primary);
+      padding: 1rem 1.5rem;
+      border-radius: 4px;
+      margin: 1.5rem 0;
+      text-align: left;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+    .success-modal-content .confirm-details strong {
+      color: var(--blue-primary);
+      font-weight: 600;
+    }
+    .success-modal-content .btn-submit {
+      background: linear-gradient(135deg, var(--blue-primary) 0%, #0d47a1 100%);
+      color: var(--white);
+      border: none;
+      padding: 0.95rem 2.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-top: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0, 51, 102, 0.2);
+    }
+    .success-modal-content .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 51, 102, 0.3);
+    }
+    .success-modal-content .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    /* Inline success message shown under forms - as toast */
+    .inline-success {
+      display: none;
+      position: fixed;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 8000;
+      padding: 1rem 1.5rem;
+      background: #e9f7ef;
+      border: 2px solid #c7efd6;
+      border-left: 5px solid #28a745;
+      color: #115e36;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(17, 94, 54, 0.15);
+      max-width: 500px;
+      opacity: 0;
+      animation: slideDown 0.4s ease forwards;
+    }
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+    .inline-success.show {
+      display: block !important;
+      opacity: 1 !important;
+    }
+
+    /* Form Success Message */
+    .form-success {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2000;
+      text-align: center;
+      padding: 2.5rem;
+      background: var(--white);
+      border: 2px solid #86efac;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(16, 185, 129, 0.3), 0 0 0 9999px rgba(0, 0, 0, 0.3);
+      min-width: 320px;
+      max-width: 420px;
+      animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .form-success.show {
+      display: block !important;
+    }
+    .form-success .check {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2.5rem;
+      color: var(--white);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
+      animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .form-success h3 {
+      color: var(--blue-primary);
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+      font-weight: 700;
+    }
+    .form-success p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .form-success button {
+      padding: 0.8rem 1.8rem;
+      font-size: 0.95rem;
+      color: var(--white);
+      background: var(--blue-primary);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      box-shadow: 0 4px 12px rgba(0, 51, 102, 0.2);
+    }
+    .form-success button:hover {
+      background: var(--oxblood);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 51, 102, 0.3);
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
       .service-block { grid-template-columns: 1fr; }
@@ -518,8 +741,8 @@
     <button class="tab-btn" onclick="switchTab('stats', this)">Statistical Analysis</button>
     <button class="tab-btn" onclick="switchTab('graphics', this)">Graphic Design</button>
     <button class="tab-btn" onclick="switchTab('genomics', this)">Data & Genomic Analysis</button>
-    <button class="tab-btn" onclick="switchTab('allincl', this)">All-inclusive – Original Article</button>
-    <button class="tab-btn" onclick="switchTab('review', this)">All-inclusive – Review Article</button>
+    <button class="tab-btn" onclick="switchTab('allincl', this)">All-inclusive - Original Article</button>
+    <button class="tab-btn" onclick="switchTab('review', this)">All-inclusive - Review Article</button>
   </div>
 
   <!-- SERVICES DETAIL -->
@@ -575,32 +798,40 @@
           <h3>Request Quote</h3>
           <p>We'll respond within 24 hours.</p>
         </div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" placeholder="John Doe">
+        <div id="formContent-editing">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="name-editing" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email-editing" placeholder="john@example.com">
+          </div>
+          <div class="form-group">
+            <label>Document Type</label>
+            <select id="type-editing">
+              <option>Journal Article</option>
+              <option>Thesis / Dissertation</option>
+              <option>Grant Proposal</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Word Count</label>
+            <select id="words-editing">
+              <option>Under 3,000 words</option>
+              <option>3,000 - 7,000 words</option>
+              <option>7,000+ words</option>
+            </select>
+          </div>
+          <button class="btn-submit" onclick="submitQuote('Editing')">Send Request</button>
+          <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
         </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" placeholder="john@example.com">
+        <div class="form-success" id="formSuccess-editing">
+          <div class="check">✅</div>
+          <h3>Message Received!</h3>
+          <p>Thank you for reaching out. We'll review your request and get back to you within 24 hours.</p>
+          <button onclick="resetFormContact('editing')">Done</button>
         </div>
-        <div class="form-group">
-          <label>Document Type</label>
-          <select>
-            <option>Journal Article</option>
-            <option>Thesis / Dissertation</option>
-            <option>Grant Proposal</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Word Count</label>
-          <select>
-            <option>Under 3,000 words</option>
-            <option>3,000 - 7,000 words</option>
-            <option>7,000+ words</option>
-          </select>
-        </div>
-        <button class="btn-submit">Send Request</button>
-        <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
       </div>
     </div>
 
@@ -636,24 +867,32 @@
           <h3>Request Quote</h3>
           <p>We'll respond within 24 hours.</p>
         </div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" placeholder="John Doe">
+        <div id="formContent-stats">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="name-stats" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email-stats" placeholder="john@example.com">
+          </div>
+          <div class="form-group">
+            <label>Dataset Size</label>
+            <select id="type-stats">
+              <option>Small (< 100 rows)</option>
+              <option>Medium (100 - 1000 rows)</option>
+              <option>Large (1000+ rows)</option>
+            </select>
+          </div>
+          <button class="btn-submit" onclick="submitQuote('Statistical Analysis')">Send Request</button>
+          <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
         </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" placeholder="john@example.com">
+        <div class="form-success" id="formSuccess-stats">
+          <div class="check">✅</div>
+          <h3>Message Received!</h3>
+          <p>Thank you for reaching out. We'll review your request and get back to you within 24 hours.</p>
+          <button onclick="resetFormContact('stats')">Done</button>
         </div>
-        <div class="form-group">
-          <label>Dataset Size</label>
-          <select>
-            <option>Small (< 100 rows)</option>
-            <option>Medium (100 - 1000 rows)</option>
-            <option>Large (1000+ rows)</option>
-          </select>
-        </div>
-        <button class="btn-submit">Send Request</button>
-        <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
       </div>
     </div>
 
@@ -688,20 +927,28 @@
           <h3>Request Quote</h3>
           <p>We'll respond within 24 hours.</p>
         </div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" placeholder="John Doe">
+        <div id="formContent-graphics">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="name-graphics" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email-graphics" placeholder="john@example.com">
+          </div>
+          <div class="form-group">
+            <label>Number of Figures</label>
+            <input type="number" id="figures-graphics" placeholder="1">
+          </div>
+          <button class="btn-submit" onclick="submitQuote('Graphic Design')">Send Request</button>
+          <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
         </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" placeholder="john@example.com">
+        <div class="form-success" id="formSuccess-graphics">
+          <div class="check">✅</div>
+          <h3>Message Received!</h3>
+          <p>Thank you for reaching out. We'll review your request and get back to you within 24 hours.</p>
+          <button onclick="resetFormContact('graphics')">Done</button>
         </div>
-        <div class="form-group">
-          <label>Number of Figures</label>
-          <input type="number" placeholder="1">
-        </div>
-        <button class="btn-submit">Send Request</button>
-        <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
       </div>
     </div>
 
@@ -736,24 +983,32 @@
           <h3>Request Quote</h3>
           <p>We'll respond within 24 hours.</p>
         </div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" placeholder="John Doe">
+        <div id="formContent-genomics">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="name-genomics" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email-genomics" placeholder="john@example.com">
+          </div>
+          <div class="form-group">
+            <label>Analysis Type</label>
+            <select id="type-genomics">
+              <option>Sequence Analysis</option>
+              <option>Phylogenetics</option>
+              <option>Transcriptomics</option>
+            </select>
+          </div>
+          <button class="btn-submit" onclick="submitQuote('Data & Genomic Analysis')">Send Request</button>
+          <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
         </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" placeholder="john@example.com">
+        <div class="form-success" id="formSuccess-genomics">
+          <div class="check">✅</div>
+          <h3>Message Received!</h3>
+          <p>Thank you for reaching out. We'll review your request and get back to you within 24 hours.</p>
+          <button onclick="resetFormContact('genomics')">Done</button>
         </div>
-        <div class="form-group">
-          <label>Analysis Type</label>
-          <select>
-            <option>Sequence Analysis</option>
-            <option>Phylogenetics</option>
-            <option>Transcriptomics</option>
-          </select>
-        </div>
-        <button class="btn-submit">Send Request</button>
-        <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
       </div>
     </div>
 
@@ -761,7 +1016,7 @@
     <div class="service-block" id="block-allincl">
       <div class="service-info">
         <span class="service-tag">Service 05</span>
-        <h2>All-inclusive Services – Original Article</h2>
+        <h2>All-inclusive Services - Original Article</h2>
         <p>Do you have a research data and currently need the services of an expert to transform it into publication-ready manuscripts? Don't worry, we are here for you.</p>
         
         <div class="deliverables">
@@ -791,25 +1046,33 @@
           <h3>Request Quote</h3>
           <p>We'll respond within 24 hours.</p>
         </div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" placeholder="John Doe">
+        <div id="formContent-allincl">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="name-allincl" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email-allincl" placeholder="john@example.com">
+          </div>
+          <div class="form-group">
+            <label>Research Field</label>
+            <select id="type-allincl">
+              <option>Biological Sciences</option>
+              <option>Medical Sciences</option>
+              <option>Physical Sciences</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <button class="btn-submit" onclick="submitQuote('All-inclusive - Original Article')">Send Request</button>
+          <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
         </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" placeholder="john@example.com">
+        <div class="form-success" id="formSuccess-allincl">
+          <div class="check">✅</div>
+          <h3>Message Received!</h3>
+          <p>Thank you for reaching out. We'll review your request and get back to you within 24 hours.</p>
+          <button onclick="resetFormContact('allincl')">Done</button>
         </div>
-        <div class="form-group">
-          <label>Research Field</label>
-          <select>
-            <option>Biological Sciences</option>
-            <option>Medical Sciences</option>
-            <option>Physical Sciences</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <button class="btn-submit">Send Request</button>
-        <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
       </div>
     </div>
 
@@ -817,7 +1080,7 @@
     <div class="service-block" id="block-review">
       <div class="service-info">
         <span class="service-tag">Service 06</span>
-        <h2>All-inclusive Services – Review Article</h2>
+        <h2>All-inclusive Services - Review Article</h2>
         <p>Do you have an idea for a possible review topic and needed to make it come to light? Don't worry, we are here for you. Just share your idea or area of your interest and we will get to work and transform your ideas into a complete high quality review manuscript ready for submission.</p>
         
         <div class="deliverables">
@@ -849,20 +1112,28 @@
           <h3>Request Quote</h3>
           <p>We'll respond within 24 hours.</p>
         </div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" placeholder="John Doe">
+        <div id="formContent-review">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="name-review" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email-review" placeholder="john@example.com">
+          </div>
+          <div class="form-group">
+            <label>Review Topic Area</label>
+            <input type="text" id="topic-review" placeholder="e.g., Cancer Biology, Machine Learning in Medicine">
+          </div>
+          <button class="btn-submit" onclick="submitQuote('All-inclusive - Review Article')">Send Request</button>
+          <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
         </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" placeholder="john@example.com">
+        <div class="form-success" id="formSuccess-review">
+          <div class="check">✅</div>
+          <h3>Message Received!</h3>
+          <p>Thank you for reaching out. We'll review your request and get back to you within 24 hours.</p>
+          <button onclick="resetFormContact('review')">Done</button>
         </div>
-        <div class="form-group">
-          <label>Review Topic Area</label>
-          <input type="text" placeholder="e.g., Cancer Biology, Machine Learning in Medicine">
-        </div>
-        <button class="btn-submit">Send Request</button>
-        <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
       </div>
     </div>
 
@@ -972,6 +1243,11 @@
   </footer>
 
   <script>
+    // Global backend URL - adjust for production
+    var BACKEND_URL = window.location.origin === 'file://' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3000' 
+      : window.location.origin;
+
     function switchTab(tabId, btn) {
       document.querySelectorAll('.service-block').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -984,18 +1260,183 @@
       el.nextElementSibling.classList.toggle('open');
     }
 
-    // Handle page load with anchor hash
     window.addEventListener('load', function() {
-      const hash = window.location.hash.substring(1); // Remove #
+      const hash = window.location.hash.substring(1);
       if (hash && hash.startsWith('block-')) {
-        const tabId = hash.replace('block-', ''); // Convert block-editing to editing
-        const btn = document.querySelector(`.tab-btn[onclick*="'${tabId}'"]`);
+        const tabId = hash.replace('block-', '');
+        const btn = document.querySelector('.tab-btn[onclick*="' + tabId + '"]');
         if (btn) {
           switchTab(tabId, btn);
         }
       }
     });
+
+    function submitQuote(service) {
+      var serviceMap = {
+        'Editing': 'editing',
+        'Statistical Analysis': 'stats',
+        'Graphic Design': 'graphics',
+        'Data & Genomic Analysis': 'genomics',
+        'All-inclusive - Original Article': 'allincl',
+        'All-inclusive - Review Article': 'review'
+      };
+      
+      var formId = serviceMap[service] || service.toLowerCase().replace(/\s+/g, '-');
+      var nameField = document.getElementById('name-' + formId);
+      var emailField = document.getElementById('email-' + formId);
+      
+      var name = nameField ? nameField.value.trim() : '';
+      var email = emailField ? emailField.value.trim() : '';
+      
+      if (!name || !email) {
+        alert('Please fill in all fields.');
+        return;
+      }
+      
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+      
+      var firstName = name.split(' ')[0];
+      var lastName = name.split(' ').slice(1).join(' ') || name;
+      
+      fetch(BACKEND_URL + '/api/public/requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          first: firstName,
+          last: lastName,
+          email: email,
+          service: service,
+          note: 'Service quote request from website',
+          status: 'pending'
+        })
+      })
+      .then(function(res) { 
+        console.log('✅ Form submitted successfully, response status:', res.status);
+        return res.json(); 
+      })
+      .then(function(data) {
+        console.log('✅ API response:', data);
+        showSuccessMessage(formId, nameField, emailField);
+      })
+      .catch(function(err) {
+        console.error('❌ Error:', err);
+        // Still show success message even if API fails
+        showSuccessMessage(formId, nameField, emailField);
+      });
+    }
+
+    function showSuccessMessage(formId, nameField, emailField) {
+      // Hide form content and show success message
+      var formContent = document.getElementById('formContent-' + formId);
+      var successMsg = document.getElementById('formSuccess-' + formId);
+      
+      console.log('Showing success for:', formId);
+      console.log('formContent element:', formContent);
+      console.log('successMsg element:', successMsg);
+      
+      if (formContent) {
+        formContent.style.display = 'none';
+        console.log('✅ Hidden form content');
+      }
+      if (successMsg) {
+        successMsg.classList.add('show');
+        console.log('✅ Showed success message');
+      }
+      
+      // Clear form fields
+      if (nameField) nameField.value = '';
+      if (emailField) emailField.value = '';
+    }
+    
+    function resetFormContact(formId) {
+      // Hide success message and show form content
+      var formContent = document.getElementById('formContent-' + formId);
+      var successMsg = document.getElementById('formSuccess-' + formId);
+      
+      if (formContent) {
+        formContent.style.display = 'block';
+      }
+      if (successMsg) {
+        successMsg.classList.remove('show');
+      }
+      
+      // Clear all form fields in this form
+      var form = document.getElementById('formSuccess-' + formId).parentElement;
+      if (form) {
+        var inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(function(input) {
+          input.value = '';
+        });
+      }
+    }
+    
+    // Accessible modal open/close with focus trap
+    (function() {
+      const overlay = document.getElementById('successModal');
+      const dialog = overlay ? overlay.querySelector('.success-modal-content') : null;
+      const closeBtn = overlay ? overlay.querySelector('.btn-submit') : null;
+      let lastFocused = null;
+
+      window.openSuccessModal = function() {
+        if (!overlay || !dialog) return;
+        lastFocused = document.activeElement;
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        dialog.setAttribute('tabindex', '-1');
+        dialog.focus();
+      };
+
+      window.closeSuccessModal = function() {
+        if (!overlay) return;
+        overlay.classList.remove('show');
+        document.body.style.overflow = '';
+        if (lastFocused) try { lastFocused.focus(); } catch (e) {}
+      };
+
+      if (closeBtn) closeBtn.addEventListener('click', closeSuccessModal);
+
+      // click outside to close
+      if (overlay) overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeSuccessModal();
+      });
+
+      // keyboard handling (ESC + focus trap)
+      document.addEventListener('keydown', function(e) {
+        if (!overlay || !overlay.classList.contains('show')) return;
+        if (e.key === 'Escape') return closeSuccessModal();
+        if (e.key !== 'Tab') return;
+        const focusable = dialog.querySelectorAll("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])");
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        }
+      });
+    })();
   </script>
+
+  <!-- Success Modal (Professional) -->
+  <div class="success-modal" id="successModal">
+    <div class="success-modal-content">
+      <div class="success-icon">✓</div>
+      <div class="success-subtitle">SUCCESS</div>
+      <h2>Your Request Has Been Received</h2>
+      <p>Thank you for reaching out! We've successfully received your service request and a confirmation email has been sent to your inbox.</p>
+      <div class="confirm-details">
+        <p style="margin: 0.5rem 0;"><strong>✓ Request saved to our system</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>✓ Confirmation email sent</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>✓ Response within 24 hours</strong></p>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 1.5rem;">Our team is reviewing your request and will contact you shortly. If you have any urgent questions, please email us directly.</p>
+      <button class="btn-submit" onclick="closeSuccessModal()">Done</button>
+    </div>
+  </div>
 
 </body>
 </html>

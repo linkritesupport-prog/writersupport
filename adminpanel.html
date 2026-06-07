@@ -391,6 +391,123 @@
 <!-- TOAST -->
 <div class="toast" id="toast"><strong id="toastTitle">Done</strong><span id="toastMsg"></span></div>
 
+<!-- ADD BOOKING MODAL -->
+<div class="add-booking-modal" id="addBookingModal">
+  <div class="modal-overlay" onclick="closeAddBookingModal()"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Add Booking from Request</h2>
+      <button onclick="closeAddBookingModal()" style="font-size:1.5rem;border:none;background:none;cursor:pointer;">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="requests-panel">
+        <h3>Select a Request</h3>
+        <div id="requestsList" style="max-height:300px;overflow-y:auto;"></div>
+      </div>
+      <form id="bookingForm" style="margin-top:2rem;padding-top:2rem;border-top:1px solid #ddd;">
+        <h3>Booking Details</h3>
+        <div style="display:grid;gap:1rem;">
+          <input type="hidden" id="bookingRequestId">
+          <div>
+            <label>Client Name</label>
+            <input type="text" id="bookingName" placeholder="Auto-filled from request" required>
+          </div>
+          <div>
+            <label>Email</label>
+            <input type="email" id="bookingEmail" placeholder="Auto-filled from request" required>
+          </div>
+          <div>
+            <label>Service</label>
+            <input type="text" id="bookingService" placeholder="Auto-filled from request" required>
+          </div>
+          <div>
+            <label>Date <span style="color:red;">*</span></label>
+            <input type="date" id="bookingDate" required>
+          </div>
+          <div>
+            <label>Time</label>
+            <input type="time" id="bookingTime" value="10:00">
+          </div>
+          <div>
+            <label>Meeting Link <span style="color:#999;">(e.g., Google Meet, Zoom)</span></label>
+            <input type="url" id="bookingMeetingLink" placeholder="https://meet.google.com/...">
+          </div>
+          <button type="button" onclick="submitBookingForm()" style="background:#003366;color:white;padding:0.75rem;border:none;border-radius:6px;cursor:pointer;font-weight:600;">Add Booking</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+.add-booking-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 10000;
+  background: rgba(0,0,0,0.5);
+}
+.add-booking-modal.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.add-booking-modal .modal-overlay {
+  position: absolute;
+  inset: 0;
+}
+.add-booking-modal .modal-content {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+.add-booking-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #ddd;
+  background: #f5f5f5;
+}
+.add-booking-modal .modal-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.add-booking-modal .modal-body {
+  padding: 1.5rem;
+}
+.requests-panel {
+  margin-bottom: 1.5rem;
+}
+.requests-panel h3 {
+  margin-top: 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+.request-item {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+}
+.request-item:hover {
+  background: #f9f9f9;
+  border-color: #003366;
+}
+.request-item small {
+  color: #666;
+}
+</style>
+
 <script>
 // ═══════════════════════════════════════════════════════
 //  ▸ SWITCH: flip to true when your backend is ready
@@ -453,26 +570,30 @@ const mockAPI = {
 // ══════════════════════════
 //  REAL API (fetch)
 // ══════════════════════════
+const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+  ? 'http://localhost:3000' 
+  : window.location.origin;
 const realAPI = {
   async _r(method,path,body) {
-    console.log(`🔗 ${method} ${path}`, body || '');
-    const opts={method,credentials:'include',headers:{}};
-    if(body){opts.headers['Content-Type']='application/json';opts.body=JSON.stringify(body);}
-    const res=await fetch(path,opts);
-    const data=await res.json();
+    const fullURL = BACKEND_URL + path;
+    console.log(`🔗 ${method} ${fullURL}`, body || '');
+    const opts = { method, credentials: 'include', headers: {} };
+    if(body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+    const res = await fetch(fullURL, opts);
+    const data = await res.json();
     console.log(`📡 Response (${res.status}):`, data);
-    if(!res.ok) throw new Error(data.message||data.error||`HTTP ${res.status}`);
+    if(!res.ok) throw new Error(data.message || data.error || `HTTP ${res.status}`);
     return data;
   },
-  getRequests()        { return this._r('GET','/api/requests'); },
-  postRequest(d)       { return this._r('POST','/api/requests',d); },
-  putRequest(id,d)     { return this._r('PUT',`/api/requests/${id}`,d); },
-  deleteRequest(id)    { return this._r('DELETE',`/api/requests/${id}`); },
-  getBookings()        { return this._r('GET','/api/bookings'); },
-  postBooking(d)       { return this._r('POST','/api/bookings',d); },
-  login(u,p)           { return this._r('POST','/api/admin/login',{username:u,password:p}); },
-  logout()             { return this._r('POST','/api/admin/logout'); },
-  verify()             { return this._r('GET','/api/admin/verify'); }
+  async getRequests() { return this._r('GET', '/api/requests'); },
+  async postRequest(d) { return this._r('POST', '/api/requests', d); },
+  async putRequest(id, d) { return this._r('PUT', `/api/requests/${id}`, d); },
+  async deleteRequest(id) { return this._r('DELETE', `/api/requests/${id}`); },
+  async getBookings() { return this._r('GET', '/api/bookings'); },
+  async postBooking(d) { return this._r('POST', '/api/bookings', d); },
+  async login(u, p) { return this._r('POST', '/api/admin/login', { username: u, password: p }); },
+  async logout() { return this._r('POST', '/api/admin/logout'); },
+  async verify() { return this._r('GET', '/api/admin/verify'); }
 };
 
 const api = USE_REAL_API ? realAPI : mockAPI;
@@ -494,7 +615,7 @@ async function seedRequests() {
   const samples = [
     {first:'Fatima', last:'Bello', email:'fatima@example.com', service:'Editing',   note:'MSc thesis — 12,000 words, APA format.',        status:'pending'},
     {first:'Emeka',  last:'Eze',   email:'emeka@example.com',  service:'Statistical Analysis',          note:'ANOVA and regression for PhD dataset, SPSS.',    status:'active'},
-    {first:'Zainab', last:'Umar',  email:'zainab@example.com', service:'Graphics & Graphic Design', note:'5 publication figures — Nature journal format.', status:'done'},
+    {first:'Zainab', last:'Umar',  email:'zainab@example.com', service:'Graphic Design', note:'5 publication figures — Nature journal format.', status:'done'},
   ];
   for (const s of samples) await api.postRequest(s);
 }
@@ -739,18 +860,75 @@ async function renderBookings() {
       }).join('');
 }
 
-async function addBookingPrompt() {
-  const name=prompt('Client Name:'); if(!name) return;
-  const service=prompt('Service / Reason:')||'General Consultation';
-  const date=prompt('Date (YYYY-MM-DD):',new Date().toISOString().split('T')[0]);
-  const time=prompt('Time:','10:00 AM')||'10:00 AM';
-  const email=prompt('Client Email:')||'';
+// Modal for adding booking from requests
+function openAddBookingModal() {
+  const modal = document.getElementById('addBookingModal');
+  if (!modal) return; // modal doesn't exist yet
+  modal.classList.add('show');
+  fetchAndShowRequests();
+}
+
+function closeAddBookingModal() {
+  const modal = document.getElementById('addBookingModal');
+  if (modal) modal.classList.remove('show');
+}
+
+async function fetchAndShowRequests() {
   try {
-    await api.postBooking({name,service,date:date||new Date().toISOString().split('T')[0],time,email,status:'confirmed'});
+    const requests = await api.getRequests();
+    const requestList = document.getElementById('requestsList');
+    if (!requestList) return;
+    
+    requestList.innerHTML = requests.length === 0 ? '<p style="padding:1rem;color:#999;">No requests found.</p>' : 
+      requests.map(r => `
+        <div class="request-item" onclick="selectRequestForBooking(${r.id}, '${r.first} ${r.last}', '${r.email}', '${r.service}')">
+          <strong>${r.first} ${r.last}</strong><br>
+          <small>${r.service} — ${r.email}</small>
+        </div>
+      `).join('');
+  } catch(e) {
+    showToast('Error', 'Failed to fetch requests');
+  }
+}
+
+function selectRequestForBooking(requestId, name, email, service) {
+  document.getElementById('bookingName').value = name;
+  document.getElementById('bookingEmail').value = email;
+  document.getElementById('bookingService').value = service;
+  document.getElementById('bookingRequestId').value = requestId;
+  document.getElementById('bookingMeetingLink').value = '';
+  // scroll to form
+  document.getElementById('bookingForm').scrollIntoView({behavior: 'smooth'});
+}
+
+async function submitBookingForm() {
+  const name = document.getElementById('bookingName').value.trim();
+  const email = document.getElementById('bookingEmail').value.trim();
+  const service = document.getElementById('bookingService').value.trim();
+  const date = document.getElementById('bookingDate').value;
+  const time = document.getElementById('bookingTime').value || '10:00 AM';
+  const meetingLink = document.getElementById('bookingMeetingLink').value.trim();
+  
+  if (!name || !email || !service || !date) {
+    showToast('Error', 'Please fill in all fields');
+    return;
+  }
+  
+  try {
+    await api.postBooking({name, email, service, date, time, status: 'confirmed', meetingLink});
     await renderBookings();
-    logActivity(`Booking: ${name} on ${date}`,'#c9a84c');
-    showToast('Booking Added',`${name} — ${date} at ${time}`);
-  } catch { showToast('Error','Failed to add booking'); }
+    logActivity(`Booking: ${name} on ${date}`, '#c9a84c');
+    showToast('Booking Added', `${name} — ${date} at ${time}`);
+    // clear form and close
+    document.getElementById('bookingForm').reset();
+    closeAddBookingModal();
+  } catch(e) {
+    showToast('Error', e.message || 'Failed to add booking');
+  }
+}
+
+async function addBookingPrompt() {
+  openAddBookingModal();
 }
 
 // ══════════════════════════
