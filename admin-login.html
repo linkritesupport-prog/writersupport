@@ -4,147 +4,275 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Login — Linkrite</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconsax@1.0.0/dist/iconsax.css">
+  <!-- Professional Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
     :root {
-      --green-deep:  #132d1e;
-      --gold:        #c9a84c;
-      --gold-light:  #e2c97e;
-      --cream:       #f5f0e8;
-      --text-dark:   #0e1f15;
-      --text-muted:  #5a7264;
-      --border:      rgba(201,168,76,0.18);
+      /* Professional Color Palette: Oxblood, Blue, White */
+      --oxblood: #601010;
+      --oxblood-dark: #450a0a;
+      --blue-primary: #003366; /* Bank of America Blue */
+      --blue-dark: #001a33;
+      --white: #ffffff;
+      --gray-light: #f8f9fa;
+      --gray-border: rgba(255, 255, 255, 0.2);
+      --text-main: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.7);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { min-height: 100%; }
+    html, body { height: 100%; }
+
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: linear-gradient(135deg, #132d1e 0%, #1e4a2f 45%, #2a6642 100%);
-      color: var(--cream);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top right, var(--blue-primary) 0%, var(--blue-dark) 100%);
+      color: var(--text-main);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 1.5rem;
+      overflow: hidden;
     }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at top left, rgba(201,168,76,0.18), transparent 35%),
-                  radial-gradient(circle at bottom right, rgba(245,240,232,0.1), transparent 30%);
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
       pointer-events: none;
+      z-index: 0;
+      opacity: 0.3;
     }
+
     .login-panel {
       position: relative;
-      width: min(420px, 100%);
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 20px;
-      padding: 3rem 2.5rem;
-      backdrop-filter: blur(18px);
-      box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+      z-index: 1;
+      width: min(440px, 100%);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--gray-border);
+      border-radius: 24px;
+      padding: 4rem 3rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+      animation: fadeIn 0.8s ease-out;
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .brand {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      text-align: center;
+      letter-spacing: -0.5px;
     }
-    .brand span { color: var(--gold); }
+    .brand span { color: var(--oxblood); }
+
     .sub {
       font-size: 0.95rem;
-      color: rgba(245,240,232,0.8);
-      margin-bottom: 2rem;
+      color: var(--text-muted);
+      margin-bottom: 3rem;
+      text-align: center;
+      line-height: 1.6;
     }
+
     .field {
       display: block;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
     }
+
     .field label {
       display: block;
       font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: rgba(245,240,232,0.65);
-      margin-bottom: 0.5rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
     }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
     .field input {
       width: 100%;
-      padding: 0.95rem 1rem;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.12);
-      color: var(--cream);
-      font-size: 0.95rem;
+      padding: 1rem 1rem 1rem 3rem;
+      border-radius: 12px;
+      border: 1px solid var(--gray-border);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--white);
+      font-size: 1rem;
       outline: none;
+      transition: var(--transition);
     }
-    .field input:focus { border-color: rgba(201,168,76,0.6); }
+
+    .field input:focus {
+      border-color: var(--oxblood);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 4px rgba(96, 16, 16, 0.2);
+    }
+
     .submit-btn {
       width: 100%;
-      padding: 1rem 1.1rem;
-      margin-top: 0.5rem;
+      padding: 1.1rem;
+      margin-top: 1rem;
       border: none;
-      border-radius: 10px;
-      background: var(--gold);
-      color: var(--green-deep);
-      font-size: 0.95rem;
+      border-radius: 12px;
+      background: var(--oxblood);
+      color: var(--white);
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s ease;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
     }
-    .submit-btn:hover { background: var(--gold-light); }
+
+    .submit-btn:hover {
+      background: #801a1a;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
     .login-error {
-      margin-top: 1rem;
-      color: #f7b1b1;
-      font-size: 0.88rem;
-      min-height: 1.2rem;
-    }
-    .hint {
       margin-top: 1.5rem;
-      font-size: 0.78rem;
-      color: rgba(245,240,232,0.7);
+      color: #ff8080;
+      font-size: 0.85rem;
       text-align: center;
+      min-height: 1.2rem;
+      font-weight: 500;
     }
+
+    .hint {
+      margin-top: 2.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--gray-border);
+    }
+
+    .hint strong { color: var(--white); }
+
+    .back-to-site {
+      position: absolute;
+      top: 2rem;
+      left: 2rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .back-to-site:hover {
+      color: var(--white);
+    }
+
   </style>
 </head>
 <body>
+
+  <a href="index.html" class="back-to-site">
+    <i class="fas fa-arrow-left"></i> Back to Site
+  </a>
+
   <div class="login-panel">
     <div class="brand">Link<span>rite</span> Admin</div>
-    <p class="sub">Enter admin credentials to access the request dashboard.</p>
+    <p class="sub">Secure access to the scientific request dashboard.</p>
+    
     <div class="field">
       <label for="loginUser">Username</label>
-      <input id="loginUser" type="text" placeholder="admin" autocomplete="username" />
+      <div class="input-wrapper">
+        <i class="fas fa-user"></i>
+        <input id="loginUser" type="text" placeholder="Enter username" autocomplete="username" />
+      </div>
     </div>
+    
     <div class="field">
       <label for="loginPass">Password</label>
-      <input id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter') submitLogin()" />
+      <div class="input-wrapper">
+        <i class="fas fa-lock"></i>
+        <input id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter') submitLogin()" />
+      </div>
     </div>
-    <button class="submit-btn" onclick="submitLogin()">Sign in →</button>
+    
+    <button class="submit-btn" onclick="submitLogin()">
+      Sign in <i class="fas fa-arrow-right"></i>
+    </button>
+    
     <div class="login-error" id="loginError"></div>
-    <div class="hint">Demo login: <strong>admin</strong> / <strong>Linkrite2026</strong></div>
+    
+    <div class="hint">
+      System Access: <strong>admin</strong> / <strong>Linkrite2026</strong>
+    </div>
   </div>
+
   <script>
     async function submitLogin() {
       const user = document.getElementById('loginUser').value.trim();
       const pass = document.getElementById('loginPass').value;
+      const errorEl = document.getElementById('loginError');
+      const btn = document.querySelector('.submit-btn');
 
-      const res = await fetch('/api/admin/login', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: user, password: pass })
-      });
-
-      if (res.ok) {
-        window.location.href = 'adminpanel.html';
+      if (!user || !pass) {
+        errorEl.textContent = 'Please enter both username and password.';
         return;
       }
 
-      const payload = await res.json().catch(() => ({}));
-      document.getElementById('loginError').textContent = payload.message || 'Invalid username or password.';
-      document.getElementById('loginPass').value = '';
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: user, password: pass })
+        });
+
+        if (res.ok) {
+          window.location.href = 'adminpanel.html';
+          return;
+        }
+
+        const payload = await res.json().catch(() => ({}));
+        errorEl.textContent = payload.message || 'Invalid credentials. Please try again.';
+      } catch (err) {
+        errorEl.textContent = 'Connection error. Please check your network.';
+      } finally {
+        btn.innerHTML = 'Sign in <i class="fas fa-arrow-right"></i>';
+        btn.disabled = false;
+        document.getElementById('loginPass').value = '';
+      }
     }
 
     async function checkAuth() {
@@ -159,10 +287,6 @@
     }
 
     checkAuth();
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/iconsax@1.0.0/dist/iconsax.js"></script>
-  <script>
-    iconsax.init();
   </script>
 </body>
 </html>
