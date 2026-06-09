@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Services — Linkrite</title>
+  <title>Services — Writers Support</title>
   <!-- Professional Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -715,7 +715,7 @@
 
   <!-- NAVIGATION -->
   <nav>
-    <a href="index.html" class="logo">Link<span>rite</span></a>
+    <a href="index.html" class="logo">Writers<span>Support</span></a>
     <ul class="nav-links">
       <li><a href="servicepage.html" class="active">Services</a></li>
       <li><a href="store.html">Store</a></li>
@@ -1201,7 +1201,7 @@
   <footer>
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="index.html" class="logo">Link<span>rite</span></a>
+        <a href="index.html" class="logo">Writers<span>Support</span></a>
         <p>Expert academic and scientific services for researchers, students, and institutions worldwide.</p>
       </div>
       <div class="footer-col">
@@ -1233,7 +1233,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 Linkrite.com — All rights reserved. Professional Academic Services.</p>
+      <p>© 2026 WritersSupport.com — All rights reserved. Professional Academic Services.</p>
       <div class="footer-socials">
         <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
         <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
@@ -1337,14 +1337,19 @@
       console.log('formContent element:', formContent);
       console.log('successMsg element:', successMsg);
       
-      if (formContent) {
-        formContent.style.display = 'none';
-        console.log('✅ Hidden form content');
-      }
-      if (successMsg) {
-        successMsg.classList.add('show');
-        console.log('✅ Showed success message');
-      }
+      // Use setTimeout to ensure DOM is updated
+      setTimeout(function() {
+        if (formContent) {
+          formContent.style.display = 'none';
+          console.log('✅ Hidden form content');
+        }
+        if (successMsg) {
+          successMsg.classList.add('show');
+          console.log('✅ Showed success message');
+        } else {
+          console.error('❌ Success message element not found for:', formId);
+        }
+      }, 100);
       
       // Clear form fields
       if (nameField) nameField.value = '';

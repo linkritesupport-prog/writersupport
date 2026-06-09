@@ -1,11 +1,10 @@
 {
-  "name": "Linkrite-admin-backend",
+  "name": "WritersSupport-admin-backend",
   "version": "1.0.0",
-  "description": "Backend server for Linkrite admin authentication and dashboard access.",
+  "description": "Backend server for Writers Support admin authentication and dashboard access.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "npm rebuild"
+    "start": "node server.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

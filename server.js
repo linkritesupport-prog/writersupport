@@ -12,7 +12,7 @@ const nodemailer = require('nodemailer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DB_FILE = path.join(__dirname, 'admin-auth.db');
-const JWT_SECRET = process.env.JWT_SECRET || 'Linkrite-secret-2026';
+const JWT_SECRET = process.env.JWT_SECRET || 'WritersSupport-secret-2026';
 const COOKIE_NAME = 'admin_token';
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Delight@2024';
@@ -60,7 +60,7 @@ const COOKIE_OPTIONS = {
 };
 
 // Email Configuration
-const EMAIL_USER = process.env.EMAIL_USER || 'linkritesupport@gmail.com';
+const EMAIL_USER = process.env.EMAIL_USER || 'inforwritersupport@gmail.com';
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD; // Gmail app password (set in environment)
 
 const transporter = nodemailer.createTransport({
@@ -117,7 +117,7 @@ function buildUserTemplate({heading, intro, detailsHtml, ctaText, ctaUrl}) {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:680px;margin:30px auto;">
       <tr>
         <td style="padding:20px 0;text-align:center;">
-          <img src="https://via.placeholder.com/200x40?text=Linkrite" alt="Linkrite" style="height:40px;" />
+          <img src="https://via.placeholder.com/200x40?text=WritersSupport" alt="Writers Support" style="height:40px;" />
         </td>
       </tr>
       <tr>
@@ -133,14 +133,14 @@ function buildUserTemplate({heading, intro, detailsHtml, ctaText, ctaUrl}) {
 
           <p style="margin:32px 0 0;color:#54687a;line-height:1.8;">
             Best regards,<br/>
-            <strong>Linkrite Team</strong><br/>
+            <strong>Writers Support Team</strong><br/>
             <span style="color:#90a0ad;font-size:13px;">Professional Services & Solutions</span>
           </p>
         </td>
       </tr>
       <tr>
         <td style="text-align:center;padding:18px 0;color:#97a3ad;font-size:12px;">
-          © ${new Date().getFullYear()} Linkrite
+          © ${new Date().getFullYear()} Writers Support
         </td>
       </tr>
     </table>
@@ -156,7 +156,7 @@ function buildAdminTemplate({heading, intro, detailsHtml, ctaText, ctaUrl}) {
   <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /></head>
   <body style="margin:0;padding:0;background:#eef3f8;font-family:Arial, sans-serif;color:#122333;">
     <table width="100%" cellpadding="0" cellspacing="0" style="max-width:720px;margin:24px auto;">
-      <tr><td style="padding:18px 0;text-align:left;"><img src="https://via.placeholder.com/160x32?text=Linkrite" alt="Linkrite" style="height:32px;" /></td></tr>
+      <tr><td style="padding:18px 0;text-align:left;"><img src="https://via.placeholder.com/160x32?text=WritersSupport" alt="Writers Support" style="height:32px;" /></td></tr>
       <tr>
         <td style="background:#fff;border-radius:8px;padding:20px;box-shadow:0 6px 18px rgba(10,30,50,0.06);">
           <h2 style="margin:0 0 12px;color:#003366;font-size:18px;">${heading}</h2>
@@ -168,7 +168,7 @@ function buildAdminTemplate({heading, intro, detailsHtml, ctaText, ctaUrl}) {
 
           <p style="margin:24px 0 0;color:#54687a;line-height:1.8;font-size:13px;">
             Best regards,<br/>
-            <strong>Linkrite Team</strong><br/>
+            <strong>Writers Support Team</strong><br/>
             <span style="color:#90a0ad;">Professional Services & Solutions</span>
           </p>
         </td>
@@ -368,7 +368,7 @@ app.post('/api/public/requests', async (req, res) => {
   console.log('✅ Request saved to database with ID:', result.lastID);
 
   // Build professional user confirmation email
-  const emailSubject = 'Service Request Confirmation - Linkrite';
+  const emailSubject = 'Service Request Confirmation - Writers Support';
   const userDetailsHtml = `
     <table style="width:100%;background:#ffffff;border-radius:6px;padding:14px;margin-top:12px;">
       <tr><td style="padding:6px 0;"><strong>Request ID:</strong> #${result.lastID}</td></tr>
@@ -380,7 +380,7 @@ app.post('/api/public/requests', async (req, res) => {
   `;
   const emailHtml = buildUserTemplate({
     heading: 'Service Request Received',
-    intro: `Hi ${first}, thank you for contacting Linkrite. We have received your request and our team will review it shortly.`,
+    intro: `Hi ${first}, thank you for contacting Writers Support. We have received your request and our team will review it shortly.`,
     detailsHtml: userDetailsHtml,
     ctaText: 'View Request Status',
     ctaUrl: 'http://localhost:3000/'
@@ -436,7 +436,7 @@ app.post('/api/public/bookings', async (req, res) => {
 
   // Send confirmation email
   // Build professional booking confirmation email
-  const emailSubject = 'Consultation Booking Confirmed - Linkrite';
+  const emailSubject = 'Consultation Booking Confirmed - Writers Support';
   const bookingDetails = `
     <table style="width:100%;background:#ffffff;border-radius:6px;padding:12px;margin-top:12px;">
       <tr><td style="padding:6px 0;"><strong>Booking ID:</strong> #${result.lastID}</td></tr>
@@ -506,7 +506,7 @@ app.post('/api/bookings', authMiddleware, async (req, res) => {
 
   // Send confirmation email
   // Build professional booking confirmation email
-  const emailSubject = 'Consultation Booking Confirmed - Linkrite';
+  const emailSubject = 'Consultation Booking Confirmed - Writers Support';
   const bookingDetails = `
     <table style="width:100%;background:#ffffff;border-radius:6px;padding:12px;margin-top:12px;">
       <tr><td style="padding:6px 0;"><strong>Booking ID:</strong> #${result.lastID}</td></tr>
@@ -551,7 +551,7 @@ app.post('/api/contact', async (req, res) => {
 
   // Send confirmation email
   // Build professional contact confirmation email
-  const emailSubject = 'We Received Your Message - Linkrite';
+  const emailSubject = 'We Received Your Message - Writers Support';
   const userDetails = `
     <table style="width:100%;background:#ffffff;border-radius:6px;padding:12px;margin-top:12px;">
       <tr><td style="padding:6px 0;"><strong>Subject:</strong> ${subject}</td></tr>
@@ -617,7 +617,7 @@ app.post('/api/bookings/public', async (req, res) => {
 
   // Send confirmation email
   // Build professional booking confirmation email
-  const emailSubject = 'Consultation Booking Request Received - Linkrite';
+  const emailSubject = 'Consultation Booking Request Received - Writers Support';
   const bookingDetails = `
     <table style="width:100%;background:#ffffff;border-radius:6px;padding:12px;margin-top:12px;">
       <tr><td style="padding:6px 0;"><strong>Name:</strong> ${name}</td></tr>

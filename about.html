@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About & Contact — Linkrite</title>
+  <title>About & Contact — Writers Support</title>
   <!-- Professional Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -749,7 +749,7 @@
 
   <!-- NAVIGATION -->
   <nav>
-    <a href="index.html" class="logo">Link<span>rite</span></a>
+    <a href="index.html" class="logo">Writers<span>Support</span></a>
     <ul class="nav-links">
       <li><a href="servicepage.html">Services</a></li>
       <li><a href="store.html">Store</a></li>
@@ -767,7 +767,7 @@
     <div>
       <div class="breadcrumb"><a href="index.html">Home</a> / About</div>
       <h1>Built for <em>Researchers</em>, By Researchers</h1>
-      <p class="page-hero-sub">Linkrite was founded on a simple belief — that access to expert scientific editing, analysis, and publishing support should not be limited by geography or resources.</p>
+      <p class="page-hero-sub">Writers Support was founded on a simple belief — that access to expert scientific editing, analysis, and publishing support should not be limited by geography or resources.</p>
     </div>
     <div class="mission-card">
       <span class="mission-tag">Our Mission</span>
@@ -805,9 +805,9 @@
   <section class="story-section">
     <div>
       <span class="section-tag">Our Story</span>
-      <h2>Why Linkrite Exists</h2>
+      <h2>Why Writers Support Exists</h2>
       <p>Too many researchers — especially in Africa and the Global South — produce excellent science but struggle with the writing, statistical interpretation, and visual presentation required to get published in top journals.</p>
-      <p>Linkrite was built to close that gap. We combine scientific expertise with a genuine passion for knowledge-sharing, offering services that go beyond editing to include statistical consulting, Graphic Design, and bioinformatics support.</p>
+      <p>Writers Support was built to close that gap. We combine scientific expertise with a genuine passion for knowledge-sharing, offering services that go beyond editing to include statistical consulting, Graphic Design, and bioinformatics support.</p>
       <p>Our store extends that mission further — curated, affordable e-books that teach researchers the skills they need to work independently and with confidence.</p>
     </div>
     <div class="story-visual">
@@ -854,7 +854,7 @@
           <div class="visual-icon"><i class="fas fa-envelope"></i></div>
           <div>
             <strong style="display: block; color: var(--blue-primary);">Email Us</strong>
-            <span style="color: var(--text-muted);">hello@linkrite.com</span>
+            <span style="color: var(--text-muted);">hello@writerssupport.com</span>
           </div>
         </div>
         <div style="display: flex; gap: 1.5rem;">
@@ -937,7 +937,7 @@
       <div class="policy-card" onclick="openModal('terms')">
         <div class="policy-icon"><i class="fas fa-file-signature"></i></div>
         <h3>Terms & Conditions</h3>
-        <p>The rules governing use of Linkrite.com and our services. Includes refund and revision policy.</p>
+        <p>The rules governing use of WritersSupport.com and our services. Includes refund and revision policy.</p>
         <span class="policy-link">Read Terms →</span>
       </div>
       <div class="policy-card" onclick="openModal('help')">
@@ -953,7 +953,7 @@
   <footer>
     <div class="footer-top">
       <div class="footer-brand">
-        <a href="index.html" class="logo">Link<span>rite</span></a>
+        <a href="index.html" class="logo">Writers<span>Support</span></a>
         <p>Expert academic and scientific services for researchers, students, and institutions worldwide.</p>
       </div>
       <div class="footer-col">
@@ -986,7 +986,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 Linkrite.com — All rights reserved. Professional Academic Services.</p>
+      <p>© 2026 WritersSupport.com — All rights reserved. Professional Academic Services.</p>
       <div class="footer-socials">
         <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
         <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
@@ -1048,31 +1048,30 @@
       })
       .then(function(data) {
         console.log('✅ API response:', data);
-        // Show success modal
-        var modal = document.getElementById('successModal');
-        console.log('🎯 Modal element:', modal);
-        if (modal) {
-          openSuccessModal();
-          console.log('✅ Opened success modal');
-        }
         
-          // Clear form fields
-          ['cfFirst','cfLast','cfEmail','cfMessage'].forEach(id => document.getElementById(id).value = '');
-          document.getElementById('cfSubject').value = '';
-
-          // Show inline success message under contact form
+        // Clear form fields first
+        ['cfFirst','cfLast','cfEmail','cfMessage'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+        const subjectEl = document.getElementById('cfSubject');
+        if (subjectEl) subjectEl.value = '';
+        
+        // Show success modal with delay to ensure DOM is ready
+        setTimeout(function() {
           try {
-            var inlineId = 'inlineSuccess-contact';
-            var inlineEl = document.getElementById(inlineId);
-            if (!inlineEl) {
-              inlineEl = document.createElement('div');
-              inlineEl.id = inlineId;
-              inlineEl.className = 'inline-success';
-              document.body.appendChild(inlineEl);
+            if (typeof window.openSuccessModal === 'function') {
+              window.openSuccessModal();
+              console.log('✅ Opened success modal');
+            } else {
+              console.error('❌ openSuccessModal function not found');
+              alert('Message sent successfully! We will reach out to you shortly.');
             }
-            inlineEl.textContent = 'Send successful — we will reach out to you shortly.';
-            inlineEl.classList.add('show');
-          } catch (e) { console.error('Inline success show error', e); }
+          } catch (e) {
+            console.error('❌ Error showing modal:', e);
+            alert('Message sent successfully! We will reach out to you shortly.');
+          }
+        }, 100);
       })
       .catch(function(err) {
         console.error('❌ Error:', err);
@@ -1151,7 +1150,7 @@
         title: 'Terms & Conditions',
         body: `
           <h4>1. Services</h4>
-          <p>Linkrite provides academic editing, statistical analysis, and bioinformatics services. We reserve the right to decline projects.</p>
+          <p>Writers Support provides academic editing, statistical analysis, and bioinformatics services. We reserve the right to decline projects.</p>
           <h4>2. Payment</h4>
           <p>Pricing is agreed upon before work begins. Payment is typically 50% upfront for large projects.</p>
           <h4>3. Revisions</h4>
