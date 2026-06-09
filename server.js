@@ -688,7 +688,7 @@ ensureDatabase()
   .then(() => {
     app.listen(PORT, () => {
       console.log(`🚀 Writers Support Server running on port ${PORT}`);
-      console.log(`📍 Local: http://localhost:${PORT}`);
+      console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
       console.log(`🌐 Production: Check Railway dashboard for deployed URL`);
     });
   })
