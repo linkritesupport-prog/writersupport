@@ -17,6 +17,8 @@ const COOKIE_NAME = 'admin_token';
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Delight@2024';
 
+// REBUILD_TRIGGER: 20260609_v2
+
 // CORS Configuration - Allow both localhost and 127.0.0.1 for development
 app.use(cors({
   origin: function(origin, callback) {
@@ -684,15 +686,19 @@ app.get('/', (req, res) => {
 
 app.use(express.static(path.join(__dirname)));
 
-ensureDatabase()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`🚀 Writers Support Server running on port ${PORT}`);
-      console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`🌐 Production: Check Railway dashboard for deployed URL`);
-    });
-  })
-  .catch(err => {
-    console.error('Failed to start server:', err);
+// Start server
+ensureDatabase().then(() => {
+  const server = app.listen(PORT, () => {
+    console.log(`🚀 Writers Support Server is running`);
+    console.log(`Port: ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  });
+  
+  server.on('error', (err) => {
+    console.error('Server error:', err);
     process.exit(1);
   });
+}).catch(err => {
+  console.error('Failed to initialize database:', err);
+  process.exit(1);
+});
