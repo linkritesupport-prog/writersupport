@@ -691,7 +691,6 @@ ensureDatabase()
       console.log(`📍 Local: http://localhost:${PORT}`);
       console.log(`🌐 Production: Check Railway dashboard for deployed URL`);
     });
-    });
   })
   .catch(err => {
     console.error('Failed to start server:', err);
