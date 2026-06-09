@@ -687,7 +687,10 @@ app.use(express.static(path.join(__dirname)));
 ensureDatabase()
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`Server running at http://localhost:${PORT}`);
+      console.log(`🚀 Writers Support Server running on port ${PORT}`);
+      console.log(`📍 Local: http://localhost:${PORT}`);
+      console.log(`🌐 Production: Check Railway dashboard for deployed URL`);
+    });
     });
   })
   .catch(err => {
