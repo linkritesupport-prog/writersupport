@@ -41,6 +41,16 @@ app.use(cors({
       return callback(null, true);
     }
     
+    // Allow Railway domains
+    if (origin && origin.includes('.up.railway.app')) {
+      return callback(null, true);
+    }
+    
+    // Allow Railway internal domains
+    if (origin && origin.includes('railway.internal')) {
+      return callback(null, true);
+    }
+    
     // In development mode, allow all origins
     if (process.env.NODE_ENV !== 'production') {
       return callback(null, true);
