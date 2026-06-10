@@ -101,6 +101,20 @@
     }
     .nav-cta::after { display: none !important; }
 
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--blue-primary); transition: var(--transition); }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translateY(12px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translateY(-12px); }
+
     /* ── HERO SECTION ── */
     .hero {
       background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-secondary) 100%);
@@ -448,11 +462,99 @@
     }
 
     @media (max-width: 768px) {
-      nav { padding: 0 5%; }
-      .nav-links { display: none; }
+      nav { height: 70px; padding: 0 4%; }
+      .logo { font-size: 1.3rem; }
+      .hamburger { display: flex; }
+      
+      .nav-links {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        flex-direction: column;
+        gap: 0;
+        padding: 2rem;
+        border-bottom: 1px solid var(--gray-border);
+        list-style: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      
+      .nav-links.active {
+        max-height: 400px;
+      }
+      
+      .nav-links li {
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--gray-border);
+      }
+      
+      .nav-links li:last-child {
+        border-bottom: none;
+      }
+      
+      .nav-links a {
+        display: block;
+        font-size: 1rem;
+      }
+
+      .hero { padding: 6rem 4% 4rem; }
       .hero h1 { font-size: 2.2rem; }
+      .hero p { font-size: 1rem; }
+      .search-container input { padding: 1rem 1.5rem 1rem 3.5rem; font-size: 0.95rem; }
+      
+      .main-container { padding: 3rem 4%; }
+      .quick-links { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 4rem; }
+      .section-title h2 { font-size: 1.8rem; }
       .contact-section { padding: 2rem; }
+      .contact-options { grid-template-columns: 1fr; gap: 1.5rem; }
+      
       .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      footer { padding: 3rem 4% 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      nav { height: 60px; padding: 0 3%; }
+      .logo { font-size: 1.1rem; }
+      
+      .nav-links {
+        top: 60px;
+        padding: 1.5rem;
+      }
+
+      .hero { padding: 5rem 3% 3rem; }
+      .hero h1 { font-size: 1.6rem; }
+      .hero p { font-size: 0.9rem; margin-bottom: 2rem; }
+      .search-container input { padding: 0.9rem 1.5rem 0.9rem 3.5rem; font-size: 0.85rem; }
+      .search-container i { left: 1.2rem; }
+
+      .main-container { padding: 2rem 3%; }
+      .quick-links { grid-template-columns: 1fr; gap: 1rem; }
+      .quick-link-card { padding: 1.5rem 1rem; }
+      .quick-link-icon { width: 50px; height: 50px; margin-bottom: 1rem; }
+      .quick-link-icon i { font-size: 1.5rem; }
+      .quick-link-card h3 { font-size: 1rem; }
+      .quick-link-card p { font-size: 0.85rem; }
+
+      .section-title h2 { font-size: 1.4rem; }
+      .faq-question { padding: 1.2rem 1.5rem; }
+      .faq-question-text { font-size: 0.95rem; }
+      .faq-answer-content { padding: 0 1.5rem 1.5rem; font-size: 0.9rem; }
+
+      .contact-section { padding: 1.5rem; }
+      .contact-section h3 { font-size: 1.5rem; }
+      .contact-section p { font-size: 1rem; margin-bottom: 2rem; }
+      .contact-options { grid-template-columns: 1fr; gap: 1rem; }
+      .contact-option { padding: 1.5rem; }
+      .contact-option i { font-size: 2rem; }
+
+      footer { padding: 2rem 3% 1rem; }
+      .footer-brand .logo { font-size: 1rem; }
+      .footer-heading { font-size: 0.85rem; }
+      .footer-links a { font-size: 0.8rem; }
+      .footer-bottom { font-size: 0.75rem; }
     }
   </style>
 </head>
@@ -461,12 +563,15 @@
   <!-- NAVIGATION -->
   <nav>
     <a href="index.html" class="logo">Writers<span>Support</span></a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="navLinks">
       <li><a href="index.html#services">Services</a></li>
-      <li><a href="index.html#store">Store</a></li>
+      <li><a href="store.html">Store</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="index.html#consult" class="nav-cta">Contact Support</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- HERO SECTION -->
@@ -695,6 +800,26 @@
 
   <!-- FAQ TOGGLE SCRIPT -->
   <script>
+    // Mobile Menu Toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    
+    if (hamburger && navLinks) {
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navLinks.classList.toggle('active');
+      });
+      
+      // Close menu when a link is clicked
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          hamburger.classList.remove('active');
+          navLinks.classList.remove('active');
+        });
+      });
+    }
+
+    // FAQ Accordion
     document.querySelectorAll('.faq-question').forEach(question => {
       question.addEventListener('click', () => {
         const faqItem = question.closest('.faq-item');

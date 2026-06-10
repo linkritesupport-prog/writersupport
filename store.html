@@ -106,8 +106,14 @@
       flex-direction: column;
       gap: 5px;
       cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
     }
-    .hamburger span { display: block; width: 24px; height: 2px; background: var(--blue-primary); }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--blue-primary); transition: var(--transition); }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translateY(12px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translateY(-12px); }
 
     /* ── PAGE HERO ── */
     .page-hero {
@@ -640,6 +646,7 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
+      nav { padding: 0 5%; }
       .featured-card { grid-template-columns: 1fr; }
       .featured-cover { padding: 3rem; }
       .sample-section { grid-template-columns: 1fr; }
@@ -647,13 +654,118 @@
     }
 
     @media (max-width: 768px) {
-      nav { padding: 0 5%; }
-      .nav-links { display: none; }
+      nav { height: 70px; padding: 0 4%; }
+      .logo { font-size: 1.3rem; }
       .hamburger { display: flex; }
-      .filter-bar { flex-direction: column; align-items: flex-start; }
-      .filter-btn { padding: 1rem; }
-      .footer-grid { grid-template-columns: 1fr; }
-      .footer-bottom { flex-direction: column; gap: 1.5rem; }
+      
+      .nav-links {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        flex-direction: column;
+        gap: 0;
+        padding: 2rem;
+        border-bottom: 1px solid var(--gray-border);
+        list-style: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      
+      .nav-links.active {
+        max-height: 400px;
+      }
+      
+      .nav-links li {
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--gray-border);
+      }
+      
+      .nav-links li:last-child {
+        border-bottom: none;
+      }
+      
+      .nav-links a {
+        display: block;
+        font-size: 1rem;
+      }
+
+      .page-hero { padding: 6rem 4% 4rem; }
+      .page-hero h1 { font-size: 2rem; }
+      .hero-selar-badge { font-size: 0.85rem; padding: 0.7rem 1.2rem; }
+      
+      .filter-bar { flex-direction: column; align-items: flex-start; padding: 1.5rem 4%; }
+      .filter-tabs { flex-wrap: wrap; gap: 0.5rem; }
+      .filter-btn { padding: 0.8rem 1.2rem; font-size: 0.75rem; }
+      .book-count { margin-top: 1rem; }
+      
+      .featured-card { grid-template-columns: 1fr; }
+      .featured-cover { padding: 2rem; }
+      .featured-cover-label { font-size: 0.8rem; }
+      .featured-cover-title { font-size: 1.6rem; }
+      .featured-info { padding: 2rem; }
+      .featured-badge { font-size: 0.75rem; padding: 0.5rem 1rem; }
+      .featured-info h2 { font-size: 1.6rem; margin-bottom: 1rem; }
+      .featured-actions { flex-direction: column; gap: 1rem; }
+      
+      .books-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+      .book-card { border-radius: 8px; }
+      .book-cover { height: 150px; }
+      .book-info { padding: 1.2rem; }
+      .book-title { font-size: 1rem; }
+      
+      .sample-section { padding: 3rem 4%; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      footer { padding: 3rem 4% 1rem; }
+      .footer-bottom { flex-direction: column; gap: 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      nav { height: 60px; padding: 0 3%; }
+      .logo { font-size: 1.1rem; }
+      
+      .nav-links {
+        top: 60px;
+        padding: 1.5rem;
+      }
+
+      .page-hero { padding: 5rem 3% 3rem; }
+      .page-hero h1 { font-size: 1.4rem; }
+      .breadcrumb { font-size: 0.7rem; }
+      .page-hero p { font-size: 0.9rem; margin-bottom: 1.5rem; }
+      .hero-selar-badge { font-size: 0.75rem; padding: 0.6rem 1rem; gap: 0.5rem; }
+      
+      .filter-bar { padding: 1rem 3%; }
+      .filter-btn { padding: 0.7rem 1rem; font-size: 0.65rem; }
+      .book-count { font-size: 0.75rem; }
+      
+      .featured-section { padding: 2rem 3%; }
+      .featured-cover { padding: 1.5rem; }
+      .featured-cover-label { font-size: 0.7rem; }
+      .featured-cover-title { font-size: 1.3rem; }
+      .featured-info { padding: 1.5rem; }
+      .featured-info h2 { font-size: 1.3rem; }
+      .featured-meta { grid-template-columns: 1fr 1fr; gap: 1rem; }
+      .meta-item { flex-direction: column; }
+      .meta-label { font-size: 0.65rem; }
+      .featured-actions { flex-direction: column; gap: 0.8rem; }
+      .btn-primary, .btn-ghost { padding: 0.8rem 1.5rem; font-size: 0.9rem; }
+      
+      .books-section { padding: 2rem 3%; }
+      .books-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .book-cover { height: 120px; font-size: 0.9rem; }
+      .book-category { font-size: 0.65rem; }
+      .book-title { font-size: 0.9rem; }
+      .book-actions { gap: 0.5rem; }
+      .book-actions button { padding: 0.5rem 1rem; font-size: 0.8rem; }
+      
+      .sample-section { padding: 2rem 3%; }
+      .sample-modal { padding: 1.5rem; }
+      
+      footer { padding: 2rem 3% 1rem; }
+      .footer-brand .logo { font-size: 1rem; }
     }
   </style>
 </head>
@@ -662,16 +774,16 @@
   <!-- NAVIGATION -->
   <nav>
     <a href="index.html" class="logo">Writers<span>Support</span></a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="navLinks">
       <li><a href="servicepage.html">Services</a></li>
       <li><a href="store.html" class="active">Store</a></li>
       <li><a href="index.html#workshop">Workshop</a></li>
       <li><a href="about.html">About Us</a></li>
       <li><a href="index.html#consult" class="nav-cta">Get Started</a></li>
     </ul>
-    <div class="hamburger">
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
       <span></span><span></span><span></span>
-    </div>
+    </button>
   </nav>
 
   <!-- PAGE HERO -->
@@ -975,6 +1087,25 @@
   </div>
 
   <script>
+    // Mobile Menu Toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    
+    if (hamburger && navLinks) {
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navLinks.classList.toggle('active');
+      });
+      
+      // Close menu when a link is clicked
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          hamburger.classList.remove('active');
+          navLinks.classList.remove('active');
+        });
+      });
+    }
+
     function filterBooks(cat, btn) {
       const cards = document.querySelectorAll('.book-card');
       let count = 0;

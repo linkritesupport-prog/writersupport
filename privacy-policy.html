@@ -101,6 +101,20 @@
     }
     .nav-cta::after { display: none !important; }
 
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--blue-primary); transition: var(--transition); }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translateY(12px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translateY(-12px); }
+
     /* ── HEADER ── */
     .page-header {
       background: var(--blue-light);
@@ -261,14 +275,89 @@
     }
 
     @media (max-width: 992px) {
+      nav { padding: 0 5%; }
       .content-wrapper { grid-template-columns: 1fr; }
       .sidebar-nav { display: none; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 768px) {
-      .page-header h1 { font-size: 2.2rem; }
-      .footer-grid { grid-template-columns: 1fr; }
+      nav { height: 70px; padding: 0 4%; }
+      .logo { font-size: 1.3rem; }
+      .hamburger { display: flex; }
+      
+      .nav-links {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        flex-direction: column;
+        gap: 0;
+        padding: 2rem;
+        border-bottom: 1px solid var(--gray-border);
+        list-style: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      
+      .nav-links.active {
+        max-height: 400px;
+      }
+      
+      .nav-links li {
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--gray-border);
+      }
+      
+      .nav-links li:last-child {
+        border-bottom: none;
+      }
+      
+      .nav-links a {
+        display: block;
+        font-size: 1rem;
+      }
+
+      .page-header { padding: 6rem 4% 4rem; }
+      .page-header h1 { font-size: 2rem; }
+      .page-header p { font-size: 0.85rem; }
+      
+      .content-wrapper { padding: 3rem 4%; }
+      .sidebar-nav { display: none; }
+      .policy-content { max-width: 100%; }
+      .policy-content h2 { font-size: 1.5rem; margin-top: 2rem; }
+      .policy-content h3 { font-size: 1.1rem; margin-top: 1.5rem; }
+      .policy-content p, .policy-content li { font-size: 0.95rem; }
+      
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      footer { padding: 3rem 4% 1rem; }
+      .footer-bottom { text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      nav { height: 60px; padding: 0 3%; }
+      .logo { font-size: 1.1rem; }
+      
+      .nav-links {
+        top: 60px;
+        padding: 1.5rem;
+      }
+
+      .page-header { padding: 5rem 3% 3rem; }
+      .page-header h1 { font-size: 1.4rem; }
+      .page-header p { font-size: 0.75rem; }
+      
+      .content-wrapper { padding: 2rem 3%; }
+      .policy-content h2 { font-size: 1.3rem; margin-top: 1.5rem; }
+      .policy-content h3 { font-size: 1rem; margin-top: 1rem; }
+      .policy-content p, .policy-content li { font-size: 0.9rem; }
+      .policy-content ul { padding-left: 1.5rem; }
+      
+      footer { padding: 2rem 3% 1rem; }
+      .footer-brand .logo { font-size: 1rem; }
+      .footer-col h5 { font-size: 0.85rem; }
     }
   </style>
 </head>
@@ -277,12 +366,15 @@
   <!-- NAVIGATION -->
   <nav>
     <a href="index.html" class="logo">Writers<span>Support</span></a>
-    <ul class="nav-links">
-      <li><a href="index.html#services">Services</a></li>
-      <li><a href="index.html#store">Store</a></li>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="servicepage.html">Services</a></li>
+      <li><a href="store.html">Store</a></li>
       <li><a href="about.html">About</a></li>
-      <li><a href="contact.html" class="nav-cta">Contact</a></li>
+      <li><a href="about.html#contact" class="nav-cta">Contact</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- PAGE HEADER -->
@@ -476,6 +568,25 @@
         }
       });
     });
+
+    // Mobile Menu Toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    
+    if (hamburger && navLinks) {
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navLinks.classList.toggle('active');
+      });
+      
+      // Close menu when a link is clicked
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          hamburger.classList.remove('active');
+          navLinks.classList.remove('active');
+        });
+      });
+    }
   </script>
 
 </body>

@@ -106,8 +106,14 @@
       flex-direction: column;
       gap: 5px;
       cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
     }
-    .hamburger span { display: block; width: 24px; height: 2px; background: var(--blue-primary); }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--blue-primary); transition: var(--transition); }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translateY(12px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translateY(-12px); }
 
     /* ── PAGE HERO ── */
     .page-hero {
@@ -693,6 +699,7 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
+      nav { padding: 0 5%; }
       .service-block { grid-template-columns: 1fr; }
       .request-form { position: static; margin-top: 4rem; }
       .timeline { grid-template-columns: repeat(3, 1fr); }
@@ -702,12 +709,111 @@
     }
 
     @media (max-width: 768px) {
-      nav { padding: 0 5%; }
-      .nav-links { display: none; }
+      nav { height: 70px; padding: 0 4%; }
+      .logo { font-size: 1.3rem; }
       .hamburger { display: flex; }
-      .timeline { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr; }
-      .footer-bottom { flex-direction: column; gap: 1.5rem; }
+      
+      .nav-links {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        flex-direction: column;
+        gap: 0;
+        padding: 2rem;
+        border-bottom: 1px solid var(--gray-border);
+        list-style: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      
+      .nav-links.active {
+        max-height: 400px;
+      }
+      
+      .nav-links li {
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--gray-border);
+      }
+      
+      .nav-links li:last-child {
+        border-bottom: none;
+      }
+      
+      .nav-links a {
+        display: block;
+        font-size: 1rem;
+      }
+
+      .page-hero { padding: 6rem 4% 4rem; }
+      .page-hero h1 { font-size: 2rem; }
+      .tabs-bar { padding: 0 4%; }
+      .tab-btn { padding: 0.75rem 0.7rem; font-size: 0.6rem; }
+      
+      .services-detail { padding: 3rem 4%; }
+      .service-info h2 { font-size: 1.8rem; }
+      .service-info p { font-size: 1rem; }
+      .request-form { position: static; margin-top: 3rem; padding: 2rem; }
+      
+      .timeline { grid-template-columns: 1fr; padding: 3rem 4%; }
+      .timeline-item { flex-direction: column; }
+      .timeline::before { display: none; }
+      
+      .faq-section { padding: 3rem 4%; }
+      .faq-item { margin-bottom: 0.8rem; }
+      .faq-question { padding: 1rem 1.5rem; }
+      
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      footer { padding: 3rem 4% 1rem; }
+      .footer-bottom { flex-direction: column; gap: 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      nav { height: 60px; padding: 0 3%; }
+      .logo { font-size: 1.1rem; }
+      
+      .nav-links {
+        top: 60px;
+        padding: 1.5rem;
+      }
+
+      .page-hero { padding: 5rem 3% 3rem; }
+      .page-hero h1 { font-size: 1.4rem; }
+      .breadcrumb { font-size: 0.7rem; }
+      
+      .tab-btn { padding: 0.65rem 0.6rem; font-size: 0.55rem; }
+      
+      .services-detail { padding: 2rem 3%; }
+      .service-tag { font-size: 0.65rem; }
+      .service-info h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+      .service-info p { font-size: 0.9rem; margin-bottom: 1.5rem; }
+      .deliverables { gap: 1rem; }
+      .deliverable-item { padding: 1rem; }
+      .deliverable-item i { font-size: 1.8rem; }
+      .deliverable-item h4 { font-size: 0.95rem; }
+      
+      .request-form { padding: 1.5rem; margin-top: 2rem; }
+      .request-form h3 { font-size: 1.3rem; }
+      .form-group input,
+      .form-group textarea,
+      .form-group select { padding: 0.8rem 1rem; font-size: 0.9rem; }
+      .form-btn { padding: 0.8rem 1.5rem; font-size: 0.9rem; }
+      
+      .timeline { padding: 2rem 3%; gap: 1rem; }
+      .timeline-item { padding: 1rem; }
+      .timeline-num { font-size: 1.5rem; }
+      .timeline-text { font-size: 0.85rem; }
+      
+      .faq-section { padding: 2rem 3%; }
+      .faq-item { margin-bottom: 0.6rem; }
+      .faq-question { padding: 0.9rem 1rem; }
+      .faq-question-text { font-size: 0.9rem; }
+      .faq-answer-content { padding: 0 1rem 1rem; font-size: 0.85rem; }
+      
+      footer { padding: 2rem 3% 1rem; }
+      .footer-brand .logo { font-size: 1rem; }
     }
   </style>
 </head>
@@ -716,16 +822,16 @@
   <!-- NAVIGATION -->
   <nav>
     <a href="index.html" class="logo">Writers<span>Support</span></a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="navLinks">
       <li><a href="servicepage.html" class="active">Services</a></li>
       <li><a href="store.html">Store</a></li>
       <li><a href="index.html#workshop">Workshop</a></li>
       <li><a href="about.html">About Us</a></li>
       <li><a href="index.html#consult" class="nav-cta">Get Started</a></li>
     </ul>
-    <div class="hamburger">
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
       <span></span><span></span><span></span>
-    </div>
+    </button>
   </nav>
 
   <!-- PAGE HERO -->
@@ -1243,6 +1349,25 @@
   </footer>
 
   <script>
+    // Mobile Menu Toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    
+    if (hamburger && navLinks) {
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navLinks.classList.toggle('active');
+      });
+      
+      // Close menu when a link is clicked
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          hamburger.classList.remove('active');
+          navLinks.classList.remove('active');
+        });
+      });
+    }
+
     // Global backend URL - adjust for production
     var BACKEND_URL = window.location.origin === 'file://' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
       ? 'http://localhost:3000' 
