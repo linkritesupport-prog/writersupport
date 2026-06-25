@@ -399,6 +399,117 @@
     .timeline-step h4 { color: var(--blue-primary); margin-bottom: 0.5rem; font-weight: 700; }
     .timeline-step p { font-size: 0.85rem; color: var(--text-muted); }
 
+    .service-delivered {
+      padding: 8rem 8%;
+      background: #ffffff;
+    }
+    .service-delivered h2 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 2.5rem;
+      color: var(--blue-primary);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .service-delivered p {
+      max-width: 760px;
+      margin: 0 auto 3rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      text-align: center;
+    }
+    .delivered-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+    .case-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: var(--white);
+      border: 1px solid var(--gray-border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.06);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .case-card:hover { transform: translateY(-5px); box-shadow: 0 24px 55px rgba(0,0,0,0.12); }
+    .case-thumb {
+      height: 220px;
+      min-height: 220px;
+      background: linear-gradient(135deg, rgba(0,51,102,0.95) 0%, rgba(96,16,16,0.95) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #ffffff;
+      font-weight: 700;
+      padding: 0;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+    .case-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .case-thumb small {
+      display: block;
+      font-size: 0.75rem;
+      opacity: 0.8;
+      margin-top: 0.6rem;
+      font-weight: 400;
+    }
+    .case-content {
+      flex: 1;
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .case-title {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 5rem;
+    }
+    .case-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: var(--blue-light);
+      color: var(--blue-primary);
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .case-title {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 4.5rem;
+    }
+    .case-link {
+      display: inline-block;
+      color: var(--oxblood);
+      text-decoration: none;
+      font-weight: 700;
+      margin-top: 0.5rem;
+    }
+    .case-link:hover { text-decoration: underline; }
+
     /* ── FAQ SECTION ── */
     .faq-section {
       padding: 8rem 8%;
@@ -861,31 +972,28 @@
         <h2>Editing</h2>
         
         <div style="margin-bottom: 2rem;">
-          <h3 style="color: #003366; font-weight: 700; margin-bottom: 1rem;"><strong>A. In Depth Editing Services</strong></h3>
+          <h3 style="color: #003366; font-weight: 700; margin-bottom: 1rem;"><strong>A. Basic Editing Services</strong></h3>
           <div class="deliverables">
             <h4 style="color: #601010; text-decoration: underline; margin-bottom: 0.8rem;">What you receive</h4>
             <ul class="deliverable-list">
-              <li><i class="fas fa-check" style="color: #003366;"></i> Manuscript formatting</li>
-              <li><i class="fas fa-check" style="color: #003366;"></i> Language and grammar polishing</li>
-              <li><i class="fas fa-check" style="color: #003366;"></i> 2 rounds of editing by subject experts</li>
-              <li><i class="fas fa-check" style="color: #003366;"></i> Plagiarism check</li>
+              <li><i class="fas fa-check" style="color: #003366;"></i> Language editing</li>
+              <li><i class="fas fa-check" style="color: #003366;"></i> Plagiarism check – Once</li>
+              <li><i class="fas fa-check" style="color: #003366;"></i> Cover letter drafting</li>
               <li><i class="fas fa-check" style="color: #003366;"></i> Editing certificate</li>
             </ul>
           </div>
         </div>
 
         <div style="margin-bottom: 2rem;">
-          <h3 style="color: #003366; font-weight: 700; margin-bottom: 1rem;"><strong>B. Scientific Editing and Review</strong></h3>
+          <h3 style="color: #003366; font-weight: 700; margin-bottom: 1rem;"><strong>B. In-Depth Editing & Review Services</strong></h3>
           <div class="deliverables">
             <h4 style="color: #601010; text-decoration: underline; margin-bottom: 0.8rem;">What you receive</h4>
             <ul class="deliverable-list">
               <li><i class="fas fa-check" style="color: #003366;"></i> Technical review</li>
-              <li><i class="fas fa-check" style="color: #003366;"></i> Language and grammar editing</li>
-              <li><i class="fas fa-check" style="color: #003366;"></i> Journal formatting</li>
-              <li><i class="fas fa-check" style="color: #003366;"></i> Plagiarism check – unlimited</li>
-              <li><i class="fas fa-check" style="color: #003366;"></i> Response letter/comment check</li>
-              <li><i class="fas fa-check" style="color: #003366;"></i> Cover letter creation</li>
+              <li><i class="fas fa-check" style="color: #003366;"></i> Language editing</li>
+              <li><i class="fas fa-check" style="color: #003366;"></i> Plagiarism check – Unlimited</li>
               <li><i class="fas fa-check" style="color: #003366;"></i> 2 rounds of editing by subject experts</li>
+              <li><i class="fas fa-check" style="color: #003366;"></i> Cover letter drafting</li>
               <li><i class="fas fa-check" style="color: #003366;"></i> Editing certificate</li>
             </ul>
           </div>
@@ -950,12 +1058,10 @@
         <div class="deliverables">
           <h4>What you receive</h4>
           <ul class="deliverable-list">
-            <li><i class="fas fa-check"></i> Study Design Analysis</li>
-            <li><i class="fas fa-check"></i> Hypothesis Testing</li>
-            <li><i class="fas fa-check"></i> ANOVA & Regression</li>
-            <li><i class="fas fa-check"></i> Publication-ready Tables</li>
-            <li><i class="fas fa-check"></i> Written Interpretation</li>
-            <li><i class="fas fa-check"></i> Raw Output Files</li>
+            <li><i class="fas fa-check"></i> Statistical analysis</li>
+            <li><i class="fas fa-check"></i> Written interpretation</li>
+            <li><i class="fas fa-check"></i> Raw output files</li>
+            <li><i class="fas fa-check"></i> Summary tables</li>
           </ul>
         </div>
 
@@ -1124,15 +1230,12 @@
         <div class="deliverables">
           <h4 style="color: #601010; text-decoration: underline; margin-bottom: 0.8rem;">What you receive</h4>
           <ul class="deliverable-list">
-            <li><i class="fas fa-check" style="color: #003366;"></i> Complete manuscript writing</li>
+            <li><i class="fas fa-check" style="color: #003366;"></i> Provide downloadable current research papers</li>
+            <li><i class="fas fa-check" style="color: #003366;"></i> Manuscript consulting & guidance – step by step</li>
             <li><i class="fas fa-check" style="color: #003366;"></i> Data analysis</li>
-            <li><i class="fas fa-check" style="color: #003366;"></i> Graphic Design and illustration creation</li>
-            <li><i class="fas fa-check" style="color: #003366;"></i> Editing and formatting</li>
-            <li><i class="fas fa-check" style="color: #003366;"></i> Journal article search</li>
-            <li><i class="fas fa-check" style="color: #003366;"></i> Plagiarism check – unlimited</li>
-            <li><i class="fas fa-check" style="color: #003366;"></i> Journal selection</li>
-            <li><i class="fas fa-check" style="color: #003366;"></i> Manuscript submission</li>
-            <li><i class="fas fa-check" style="color: #003366;"></i> Manuscript revision and addressing of reviewers comments</li>
+            <li><i class="fas fa-check" style="color: #003366;"></i> Visualization & illustrations</li>
+            <li><i class="fas fa-check" style="color: #003366;"></i> Manuscript editing</li>
+            <li><i class="fas fa-check" style="color: #003366;"></i> Plagiarism check – Unlimited</li>
           </ul>
         </div>
 
@@ -1269,6 +1372,64 @@
         <h4>Delivery</h4>
         <p>Final high-quality files delivered to your inbox.</p>
       </div>
+    </div>
+  </section>
+
+  <!-- SERVICES DELIVERED -->
+  <section class="service-delivered">
+    <h2>Services Delivered</h2>
+    <p>Published works and authors who have used Writers Support services to turn their academic ideas into high-impact research outputs.</p>
+    <div class="delivered-grid">
+      <article class="case-card">
+        <div class="case-thumb">
+          <img src="Book store/Annotation 2026-06-25 150657.png" alt="Microbial membrane transport thumbnail">
+        </div>
+        <div class="case-content">
+          <span class="case-type">Published</span>
+          <h3 class="case-title">Microbial membrane transport genes in maize rhizosphere under fertilization – a preliminary study</h3>
+          <a class="case-link" href="https://www.nature.com/articles/s41598-024-80606-9" target="_blank" rel="noreferrer">View article →</a>
+        </div>
+      </article>
+      <article class="case-card">
+        <div class="case-thumb">
+          <img src="Book store/Rock powder amendment in enhancing plant-mediated carbon sequestration.png" alt="Rock powder amendment thumbnail">
+        </div>
+        <div class="case-content">
+          <span class="case-type">Published</span>
+          <h3 class="case-title">Rock powder amendment in enhancing plant-mediated carbon sequestration</h3>
+          <a class="case-link" href="https://www.frontiersin.org/journals/climate/articles/10.3389/fclim.2026.1863945/full" target="_blank" rel="noreferrer">View article →</a>
+        </div>
+      </article>
+      <article class="case-card">
+        <div class="case-thumb">
+          <img src="Book store/Spatiotemporal variation in soil.png" alt="Soil carbon ratio thumbnail">
+        </div>
+        <div class="case-content">
+          <span class="case-type">Published</span>
+          <h3 class="case-title">Spatiotemporal variation in soil carbon-to-nitrogen and carbon-to-hydrogen ratios: a case study from agricultural farmlands in Southern Texas, USA</h3>
+          <a class="case-link" href="https://www.frontiersin.org/journals/soil-science/articles/10.3389/fsoil.2026.1824041/full" target="_blank" rel="noreferrer">View article →</a>
+        </div>
+      </article>
+      <article class="case-card">
+        <div class="case-thumb">
+          <img src="Book store/The impacts of biochar .png" alt="Biochar impacts thumbnail">
+        </div>
+        <div class="case-content">
+          <span class="case-type">Published</span>
+          <h3 class="case-title">The impacts of biochar on carbon sequestration, soil processes, and microbial communities: A review</h3>
+          <a class="case-link" href="https://link.springer.com/article/10.1007/s42773-025-00499-3" target="_blank" rel="noreferrer">View article →</a>
+        </div>
+      </article>
+      <article class="case-card">
+        <div class="case-thumb">
+          <img src="Book store/Carbon sequestration and soil responses to soil amendments – A review.png" alt="Carbon sequestration thumbnail">
+        </div>
+        <div class="case-content">
+          <span class="case-type">Published</span>
+          <h3 class="case-title">Carbon sequestration and soil responses to soil amendments – A review</h3>
+          <a class="case-link" href="https://www.sciencedirect.com/science/article/pii/S2772416625001263" target="_blank" rel="noreferrer">View article →</a>
+        </div>
+      </article>
     </div>
   </section>
 
