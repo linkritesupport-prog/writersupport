@@ -960,12 +960,12 @@
 
   <!-- TABS BAR -->
   <div class="tabs-bar">
-    <button class="tab-btn" onclick="switchTab('editing', this)">Editing</button>
-    <button class="tab-btn" onclick="switchTab('stats', this)">Statistical Analysis</button>
-    <button class="tab-btn" onclick="switchTab('graphics', this)">Graphic Design</button>
-    <button class="tab-btn" onclick="switchTab('genomics', this)">Data & Genomic Analysis</button>
-    <button class="tab-btn" onclick="switchTab('allincl', this)">All Inclusive Services</button>
-    <button class="tab-btn" onclick="switchTab('delivered', this)">Services Delivered</button>
+    <button class="tab-btn" data-tab="editing" onclick="switchTab('editing', this)">Editing</button>
+    <button class="tab-btn" data-tab="stats" onclick="switchTab('stats', this)">Statistical Analysis</button>
+    <button class="tab-btn" data-tab="graphics" onclick="switchTab('graphics', this)">Graphic Design</button>
+    <button class="tab-btn" data-tab="genomics" onclick="switchTab('genomics', this)">Data & Genomic Analysis</button>
+    <button class="tab-btn" data-tab="allincl" onclick="switchTab('allincl', this)">All Inclusive Services</button>
+    <button class="tab-btn" data-tab="delivered" onclick="switchTab('delivered', this)">Services Delivered</button>
   </div>
 
   <!-- SERVICES DETAIL -->
@@ -1418,26 +1418,23 @@
       <div class="footer-col">
         <h5>Services</h5>
         <ul class="footer-links">
-            <li><a href="#">Editing</a></li>
-          <li><a href="#">Statistical Analysis</a></li>
-          <li><a href="#">Graphic Design</a></li>
-          <li><a href="#">Genomic Analysis</a></li>
+          <li><a href="servicepage.html#block-editing">Editing</a></li>
+          <li><a href="servicepage.html#block-stats">Statistical Analysis</a></li>
+          <li><a href="servicepage.html#block-graphics">Graphic Design</a></li>
+          <li><a href="servicepage.html#block-genomics">Genomic Analysis</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h5>Store</h5>
         <ul class="footer-links">
-          <li><a href="store.html">All E-books</a></li>
-          <li><a href="#">Microbiology</a></li>
-          <li><a href="#">Chemistry</a></li>
-          <li><a href="#">Selar Store</a></li>
+          <li><a href="store.html#all-books">All E-books</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h5>Company</h5>
         <ul class="footer-links">
           <li><a href="about.html">About Us</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="index.html#contact">Contact Us</a></li>
           <li><a href="privacy-policy.html">Privacy Policy</a></li>
           <li><a href="terms-conditions.html">Terms & Conditions</a></li>
         </ul>
@@ -1478,11 +1475,28 @@
       ? 'http://localhost:3000' 
       : window.location.origin;
 
-    function switchTab(tabId, btn) {
+    function switchTab(tabId, btn, shouldScroll = false) {
+      const block = document.getElementById('block-' + tabId);
+      if (!block) return;
+
       document.querySelectorAll('.service-block').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('block-' + tabId).classList.add('active');
-      btn.classList.add('active');
+
+      block.classList.add('active');
+
+      const activeBtn = btn || document.querySelector('.tab-btn[data-tab="' + tabId + '"]');
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+      }
+
+      const targetHash = 'block-' + tabId;
+      if (window.location.hash !== '#' + targetHash) {
+        history.replaceState(null, '', '#' + targetHash);
+      }
+
+      if (shouldScroll) {
+        block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
 
     function toggleFaq(el) {
@@ -1490,16 +1504,31 @@
       el.nextElementSibling.classList.toggle('open');
     }
 
-    window.addEventListener('load', function() {
-      const hash = window.location.hash.substring(1);
-      if (hash && hash.startsWith('block-')) {
-        const tabId = hash.replace('block-', '');
-        const btn = document.querySelector('.tab-btn[onclick*="' + tabId + '"]');
-        if (btn) {
-          switchTab(tabId, btn);
-        }
+    function activateTabFromHash() {
+      const hash = (window.location.hash.substring(1) || '').toLowerCase();
+      const tabMap = {
+        'block-editing': 'editing',
+        'editing': 'editing',
+        'block-stats': 'stats',
+        'stats': 'stats',
+        'block-graphics': 'graphics',
+        'graphics': 'graphics',
+        'block-genomics': 'genomics',
+        'genomics': 'genomics',
+        'block-allincl': 'allincl',
+        'allincl': 'allincl',
+        'block-delivered': 'delivered',
+        'delivered': 'delivered'
+      };
+
+      const tabId = tabMap[hash];
+      if (tabId) {
+        switchTab(tabId, null, true);
       }
-    });
+    }
+
+    window.addEventListener('load', activateTabFromHash);
+    window.addEventListener('hashchange', activateTabFromHash);
 
     function submitQuote(service) {
       var serviceMap = {

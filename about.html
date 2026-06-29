@@ -438,11 +438,17 @@
       transition: var(--transition);
       cursor: pointer;
       text-align: left;
+      color: var(--white);
+      text-decoration: none;
+      display: block;
     }
 
-    .policy-card:hover {
+    .policy-card:hover,
+    .policy-card:visited {
       background: rgba(255,255,255,0.1);
       transform: translateY(-5px);
+      color: var(--white);
+      text-decoration: none;
     }
 
     .policy-icon {
@@ -971,9 +977,11 @@
     <div>
       <span class="section-tag">Our Story</span>
       <h2>Why Writers Support Exists</h2>
-      <p>Too many researchers — especially in Africa and the Global South — produce excellent science but struggle with the writing, statistical interpretation, and visual presentation required to get published in top journals.</p>
-      <p>Writers Support was built to close that gap. We combine scientific expertise with a genuine passion for knowledge-sharing, offering services that go beyond editing to include statistical consulting, Graphic Design, and bioinformatics support.</p>
-      <p>Our store extends that mission further — curated, affordable e-books that teach researchers the skills they need to work independently and with confidence.</p>
+      <p style="text-align: justify;">At Writers Support, we believe that great research deserves to be communicated clearly and published with confidence. Every year, thousands of researchers produce valuable scientific work, yet many face challenges in transforming their findings into manuscripts that meet the standards of peer-reviewed journals.</p>
+      <p style="text-align: justify;">Our goal is to bridge that gap by providing comprehensive support throughout the publication journey. Whether you are drafting your first manuscript or preparing a revised submission, our team offers expert assistance in scientific writing, manuscript editing, journal publication support, plagiarism checking and similarity reduction, proofreading, and formatting to help your work achieve its full potential.</p>
+      <p style="text-align: justify;">Beyond manuscript preparation, we also provide statistical analysis, data visualization, graphical abstract and figure design, and bioinformatics support, ensuring that every aspect of your research is presented with clarity, accuracy, and professionalism.</p>
+      <p style="text-align: justify;">We are equally committed to empowering researchers to become confident scientific writers. Through our carefully curated e-books, practical guides, and educational resources, we equip students, academics, and professionals with the knowledge and skills needed to write, publish, and communicate research independently.</p>
+      <p style="text-align: justify;">At Writers Support, we don't just edit manuscripts, we partner with researchers to transform quality science into impactful publications.</p>
     </div>
     <div class="story-visual">
       <div class="visual-item">
@@ -995,13 +1003,6 @@
         <div class="visual-text">
           <strong>Knowledge First</strong>
           <span>Our e-book store exists to empower researchers who want to build their own skills.</span>
-        </div>
-      </div>
-      <div class="visual-item">
-        <div class="visual-icon"><i class="fas fa-globe-africa"></i></div>
-        <div class="visual-text">
-          <strong>Built for Africa</strong>
-          <span>Pricing and delivery methods designed with Nigerian and African researchers in mind.</span>
         </div>
       </div>
     </div>
@@ -1093,24 +1094,24 @@
       <p>Clear, plain-English policies governing our commitment to your research.</p>
     </div>
     <div class="policies-grid">
-      <div class="policy-card" onclick="openModal('privacy')">
+      <a href="privacy-policy.html" class="policy-card">
         <div class="policy-icon"><i class="fas fa-user-shield"></i></div>
         <h3>Privacy Policy</h3>
         <p>How we collect, use, and protect your personal information. We never sell or share your data.</p>
         <span class="policy-link">Read Policy →</span>
-      </div>
-      <div class="policy-card" onclick="openModal('terms')">
+      </a>
+      <a href="terms-conditions.html" class="policy-card">
         <div class="policy-icon"><i class="fas fa-file-signature"></i></div>
         <h3>Terms & Conditions</h3>
         <p>The rules governing use of Writer and our services. Includes refund and revision policy.</p>
         <span class="policy-link">Read Terms →</span>
-      </div>
-      <div class="policy-card" onclick="openModal('help')">
+      </a>
+      <a href="help.html" class="policy-card">
         <div class="policy-icon"><i class="fas fa-question-circle"></i></div>
         <h3>Help Center</h3>
         <p>Answers to common questions about our services, store, delivery timelines, and submissions.</p>
         <span class="policy-link">Get Help →</span>
-      </div>
+      </a>
     </div>
   </section>
 
@@ -1134,18 +1135,17 @@
       <div class="footer-col">
         <h5>Store</h5>
         <ul>
-          <li><a href="#">All E-books</a></li>
-          <li><a href="#">Selar Store</a></li>
-          <li><a href="#">Workshop</a></li>
+          <li><a href="store.html#all-books">All E-books</a></li>
+          <li><a href="index.html#workshop">Workshop</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h5>Company</h5>
         <ul>
           <li><a href="about.html">About Us</a></li>
-          <li><a href="#contact">Contact Us</a></li>
-          <li><a href="#" onclick="openModal('privacy')">Privacy Policy</a></li>
-          <li><a href="#" onclick="openModal('terms')">Terms & Conditions</a></li>
+          <li><a href="about.html#contact">Contact Us</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="terms-conditions.html">Terms & Conditions</a></li>
         </ul>
       </div>
     </div>
