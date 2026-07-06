@@ -234,6 +234,12 @@
   </div>
 
   <script>
+    const BACKEND_URL = window.__BACKEND_URL__ || (
+      window.location.origin === 'file://' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:3000'
+        : window.location.origin
+    );
+
     async function submitLogin() {
       const user = document.getElementById('loginUser').value.trim();
       const pass = document.getElementById('loginPass').value;
@@ -249,7 +255,7 @@
       btn.disabled = true;
 
       try {
-        const res = await fetch('/api/admin/login', {
+        const res = await fetch(BACKEND_URL + '/api/admin/login', {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
@@ -274,7 +280,7 @@
 
     async function checkAuth() {
       try {
-        const res = await fetch('/api/admin/verify', { credentials: 'include' });
+        const res = await fetch(BACKEND_URL + '/api/admin/verify', { credentials: 'include' });
         if (res.ok) {
           window.location.href = 'adminpanel.html';
         }

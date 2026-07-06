@@ -17,45 +17,27 @@ const COOKIE_NAME = 'admin_token';
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Delight@2024';
 
+app.set('trust proxy', 1);
+
 // REBUILD_TRIGGER: 20260609_v2
 
-// CORS Configuration - Allow both localhost and 127.0.0.1 for development
+// CORS Configuration - allow local development, Netlify, and Render frontends
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow requests with no origin (mobile apps, Postman, file:// URLs, etc.)
     if (!origin) return callback(null, true);
-    
-    // Allow localhost and 127.0.0.1 for development
-    if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
-      return callback(null, true);
-    }
-    
-    // Allow file:// for development
-    if (origin === 'file://') {
-      return callback(null, true);
-    }
-    
-    // For production, use FRONTEND_URL env variable
+
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) return callback(null, true);
+    if (origin === 'file://') return callback(null, true);
+
     const FRONTEND_URL = process.env.FRONTEND_URL;
-    if (FRONTEND_URL && origin === FRONTEND_URL) {
-      return callback(null, true);
-    }
-    
-    // Allow Railway domains
-    if (origin && origin.includes('.up.railway.app')) {
-      return callback(null, true);
-    }
-    
-    // Allow Railway internal domains
-    if (origin && origin.includes('railway.internal')) {
-      return callback(null, true);
-    }
-    
-    // In development mode, allow all origins
-    if (process.env.NODE_ENV !== 'production') {
-      return callback(null, true);
-    }
-    
+    if (FRONTEND_URL && origin === FRONTEND_URL) return callback(null, true);
+
+    if (origin.includes('.netlify.app')) return callback(null, true);
+    if (origin.includes('.up.railway.app')) return callback(null, true);
+    if (origin.includes('railway.internal')) return callback(null, true);
+
+    if (process.env.NODE_ENV !== 'production') return callback(null, true);
+
     callback(new Error('CORS not allowed'));
   },
   credentials: true
@@ -66,7 +48,7 @@ app.use(cookieParser());
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  sameSite: 'strict',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   secure: process.env.NODE_ENV === 'production',
   maxAge: 2 * 60 * 60 * 1000 // 2 hours
 };

@@ -921,6 +921,12 @@
   </footer>
 
   <script>
+    const BACKEND_URL = window.__BACKEND_URL__ || (
+      window.location.origin === 'file://' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:3000'
+        : window.location.origin
+    );
+
     // Service Request Form Submission
     async function submitServiceRequest() {
       const first = document.getElementById('srFirst').value.trim();
@@ -935,7 +941,7 @@
       }
 
       try {
-        const response = await fetch('/api/public/requests', {
+        const response = await fetch(BACKEND_URL + '/api/public/requests', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
