@@ -114,11 +114,6 @@ function buildUserTemplate({heading, intro, detailsHtml, ctaText, ctaUrl}) {
   <body style="margin:0;padding:0;background:#f4f6f8;font-family: 'Inter', Arial, sans-serif;color:#253243;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:680px;margin:30px auto;">
       <tr>
-        <td style="padding:20px 0;text-align:center;">
-          <img src="https://via.placeholder.com/200x40?text=WritersSupport" alt="Writers Support" style="height:40px;" />
-        </td>
-      </tr>
-      <tr>
         <td style="background:#ffffff;border-radius:8px;padding:28px;box-shadow:0 6px 24px rgba(15,23,42,0.06);">
           <h1 style="margin:0 0 12px;color:#003366;font-size:20px;">${heading}</h1>
           <p style="margin:0 0 18px;color:#54687a;line-height:1.5;">${intro}</p>
@@ -154,7 +149,6 @@ function buildAdminTemplate({heading, intro, detailsHtml, ctaText, ctaUrl}) {
   <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /></head>
   <body style="margin:0;padding:0;background:#eef3f8;font-family:Arial, sans-serif;color:#122333;">
     <table width="100%" cellpadding="0" cellspacing="0" style="max-width:720px;margin:24px auto;">
-      <tr><td style="padding:18px 0;text-align:left;"><img src="https://via.placeholder.com/160x32?text=WritersSupport" alt="Writers Support" style="height:32px;" /></td></tr>
       <tr>
         <td style="background:#fff;border-radius:8px;padding:20px;box-shadow:0 6px 18px rgba(10,30,50,0.06);">
           <h2 style="margin:0 0 12px;color:#003366;font-size:18px;">${heading}</h2>
