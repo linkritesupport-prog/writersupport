@@ -1476,7 +1476,7 @@
     var BACKEND_URL = window.__BACKEND_URL__ || (
       window.location.origin === 'file://' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? 'http://localhost:3000'
-        : window.location.origin
+        : 'https://writersupport.onrender.com'
     );
 
     function switchTab(tabId, btn, shouldScroll = false) {
