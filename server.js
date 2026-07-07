@@ -7,7 +7,7 @@ const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +16,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'WritersSupport-secret-2026';
 const COOKIE_NAME = 'admin_token';
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Delight@2024';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.EMAIL_USER || 'writerssupport40@gmail.com';
 const FRONTEND_URL = process.env.FRONTEND_URL || process.env.BASE_URL || 'http://localhost:3000';
 
 app.set('trust proxy', 1);
@@ -54,23 +55,21 @@ const COOKIE_OPTIONS = {
 };
 
 // Email Configuration
-const EMAIL_USER = process.env.EMAIL_USER || 'writerssupport40@gmail.com';
-const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD; // Gmail app password (set in environment)
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: EMAIL_USER,
-    pass: EMAIL_PASSWORD
-  }
-});
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const RESEND_FROM = process.env.RESEND_FROM || 'hello@writerssupportservices.com';
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 async function sendEmail(to, subject, htmlContent) {
+  if (!resend) {
+    console.error('❌ Resend API key is not configured');
+    return false;
+  }
+
   try {
-    await transporter.sendMail({
-      from: EMAIL_USER,
-      to: to,
-      subject: subject,
+    await resend.emails.send({
+      from: RESEND_FROM,
+      to,
+      subject,
       html: htmlContent
     });
     console.log(`✅ Email sent to ${to}`);
@@ -82,14 +81,19 @@ async function sendEmail(to, subject, htmlContent) {
 }
 
 async function sendAdminNotification(subject, htmlContent) {
+  if (!resend) {
+    console.error('❌ Resend API key is not configured');
+    return false;
+  }
+
   try {
-    await transporter.sendMail({
-      from: EMAIL_USER,
-      to: EMAIL_USER,
-      subject: subject,
+    await resend.emails.send({
+      from: RESEND_FROM,
+      to: ADMIN_EMAIL,
+      subject,
       html: htmlContent
     });
-    console.log(`✅ Admin notification sent to ${EMAIL_USER}`);
+    console.log(`✅ Admin notification sent to ${ADMIN_EMAIL}`);
     return true;
   } catch (err) {
     console.error(`❌ Admin notification error:`, err.message);
@@ -123,7 +127,7 @@ function buildUserTemplate({heading, intro, detailsHtml, ctaText, ctaUrl}) {
 
           ${ctaText && ctaUrl ? `<p style="text-align:center;margin:24px 0 0;"><a href="${ctaUrl}" style="background:#003366;color:#fff;padding:12px 22px;border-radius:6px;text-decoration:none;font-weight:600;">${ctaText}</a></p>` : ''}
 
-          <p style="margin:24px 0 0;color:#90a0ad;font-size:13px;">We typically respond within 24-48 hours. For urgent matters, reply to this email or contact us at <a href="mailto:${EMAIL_USER}">${EMAIL_USER}</a>.</p>
+          <p style="margin:24px 0 0;color:#90a0ad;font-size:13px;">We typically respond within 24-48 hours. For urgent matters, reply to this email or contact us at <a href="mailto:${RESEND_FROM}">${RESEND_FROM}</a>.</p>
 
           <p style="margin:32px 0 0;color:#54687a;line-height:1.8;">
             Best regards,<br/>
@@ -380,14 +384,11 @@ app.post('/api/public/requests', async (req, res) => {
     ctaUrl: `${FRONTEND_URL}/`
   });
 
-  // ✅ RESPOND IMMEDIATELY TO FRONTEND — do NOT wait for emails
-  res.json({ id: result.lastID, success: true });
+  console.log(`📧 Sending user confirmation email to: ${email}`);
+  const emailSent = await sendEmail(email, emailSubject, emailHtml);
+  console.log(`📧 User email result: ${emailSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
 
-  // 📧 Send confirmation email ASYNCHRONOUSLY (fire-and-forget)
-  console.log(`📧 Queueing user confirmation email to: ${email}`);
-  sendEmail(email, emailSubject, emailHtml)
-    .then(sent => console.log(`📧 User email result: ${sent ? 'SUCCESS ✓' : 'FAILED ✗'}`))
-    .catch(err => console.error(`❌ User email error: ${err.message}`));
+  res.json({ id: result.lastID, success: true, emailSent });
 
   // 📧 Build and send admin notification asynchronously
   const adminSubject = `New Service Request - ${service} from ${first}`;
@@ -409,7 +410,7 @@ app.post('/api/public/requests', async (req, res) => {
     ctaUrl: `${FRONTEND_URL}/adminpanel.html`
   });
 
-  console.log(`📧 Queueing admin notification to: ${EMAIL_USER}`);
+  console.log(`📧 Queueing admin notification to: ${RESEND_FROM}`);
   sendAdminNotification(adminSubject, adminHtml)
     .then(sent => console.log(`📧 Admin notification result: ${sent ? 'SUCCESS ✓' : 'FAILED ✗'}`))
     .catch(err => console.error(`❌ Admin notification error: ${err.message}`));
@@ -562,7 +563,7 @@ app.post('/api/contact', async (req, res) => {
     intro: `Thank you ${first}, we have received your message and will respond shortly.`,
     detailsHtml: userDetails,
     ctaText: 'Reply',
-    ctaUrl: `mailto:${EMAIL_USER}`
+    ctaUrl: `mailto:${RESEND_FROM}`
   });
 
   // ✅ RESPOND IMMEDIATELY TO FRONTEND — do NOT wait for emails
@@ -594,7 +595,7 @@ app.post('/api/contact', async (req, res) => {
     ctaUrl: `${FRONTEND_URL}/adminpanel.html`
   });
 
-  console.log(`📧 Queueing admin notification to: ${EMAIL_USER}`);
+  console.log(`📧 Queueing admin notification to: ${RESEND_FROM}`);
   sendAdminNotification(adminSubject, adminHtml)
     .then(sent => console.log(`📧 Admin notification result: ${sent ? 'SUCCESS ✓' : 'FAILED ✗'}`))
     .catch(err => console.error(`❌ Admin notification error: ${err.message}`));
@@ -633,7 +634,7 @@ app.post('/api/bookings/public', async (req, res) => {
     intro: 'Thank you for requesting a consultation. Our team will confirm the details shortly.',
     detailsHtml: bookingDetails,
     ctaText: meetingLink ? 'Join Consultation' : 'Contact Support',
-    ctaUrl: meetingLink || `mailto:${EMAIL_USER}`
+    ctaUrl: meetingLink || `mailto:${RESEND_FROM}`
   });
 
   console.log(`📧 Attempting to send booking confirmation email to: ${email}`);
@@ -661,7 +662,7 @@ app.post('/api/bookings/public', async (req, res) => {
     ctaUrl: `${FRONTEND_URL}/adminpanel.html`
   });
 
-  console.log(`📧 Attempting to send admin notification to: ${EMAIL_USER}`);
+  console.log(`📧 Attempting to send admin notification to: ${RESEND_FROM}`);
   const adminNotificationSent = await sendAdminNotification(adminSubject, adminHtml);
   console.log(`📧 Admin notification result: ${adminNotificationSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
   
