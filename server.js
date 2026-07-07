@@ -17,28 +17,33 @@ const COOKIE_NAME = 'admin_token';
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Delight@2024';
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.EMAIL_USER || 'writerssupport40@gmail.com';
-const FRONTEND_URL = process.env.FRONTEND_URL || process.env.BASE_URL || 'http://localhost:3000';
+const SITE_DOMAIN = process.env.SITE_DOMAIN || 'writerssupportservices.com';
+const FRONTEND_URL = process.env.FRONTEND_URL || process.env.BASE_URL || (process.env.NODE_ENV === 'production' ? `https://${SITE_DOMAIN}` : 'http://localhost:3000');
 
 app.set('trust proxy', 1);
 
 // REBUILD_TRIGGER: 20260609_v2
 
-// CORS Configuration - allow local development, Netlify, and Render frontends
+function isAllowedOrigin(origin) {
+  if (!origin) return true;
+  if (origin === 'file://') return true;
+  if (origin.includes('localhost') || origin.includes('127.0.0.1')) return true;
+  if (origin.includes('.netlify.app')) return true;
+  if (origin.includes('.onrender.com')) return true;
+  if (origin.includes('.up.railway.app')) return true;
+  if (origin.includes('railway.internal')) return true;
+  if (origin.includes(SITE_DOMAIN)) return true;
+  if (origin.includes('writersupport.netlify.app')) return true;
+  if (FRONTEND_URL && origin === FRONTEND_URL) return true;
+  if (process.env.CORS_ORIGIN && origin === process.env.CORS_ORIGIN) return true;
+  return false;
+}
+
+// CORS Configuration - allow local development, Netlify, and custom domains
 app.use(cors({
   origin: function(origin, callback) {
-    if (!origin) return callback(null, true);
-
-    if (origin === 'file://' || origin.includes('localhost') || origin.includes('127.0.0.1')) return callback(null, true);
-    if (FRONTEND_URL && origin === FRONTEND_URL) return callback(null, true);
-    if (process.env.CORS_ORIGIN && origin === process.env.CORS_ORIGIN) return callback(null, true);
-
-    if (origin.includes('.netlify.app')) return callback(null, true);
-    if (origin.includes('.onrender.com')) return callback(null, true);
-    if (origin.includes('.up.railway.app')) return callback(null, true);
-    if (origin.includes('railway.internal')) return callback(null, true);
-
+    if (isAllowedOrigin(origin)) return callback(null, true);
     if (process.env.NODE_ENV !== 'production') return callback(null, true);
-
     callback(new Error('CORS not allowed'));
   },
   credentials: true
@@ -56,7 +61,7 @@ const COOKIE_OPTIONS = {
 
 // Email Configuration
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const RESEND_FROM = process.env.RESEND_FROM || 'hello@writerssupportservices.com';
+const RESEND_FROM = process.env.RESEND_FROM || `hello@${SITE_DOMAIN}`;
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 async function sendEmail(to, subject, htmlContent) {
