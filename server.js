@@ -27,15 +27,28 @@ app.set('trust proxy', 1);
 function isAllowedOrigin(origin) {
   if (!origin) return true;
   if (origin === 'file://') return true;
-  if (origin.includes('localhost') || origin.includes('127.0.0.1')) return true;
-  if (origin.includes('.netlify.app')) return true;
-  if (origin.includes('.onrender.com')) return true;
-  if (origin.includes('.up.railway.app')) return true;
-  if (origin.includes('railway.internal')) return true;
-  if (origin.includes(SITE_DOMAIN)) return true;
-  if (origin.includes('writersupport.netlify.app')) return true;
-  if (FRONTEND_URL && origin === FRONTEND_URL) return true;
-  if (process.env.CORS_ORIGIN && origin === process.env.CORS_ORIGIN) return true;
+
+  try {
+    const url = new URL(origin);
+    const hostname = url.hostname.toLowerCase();
+
+    if (hostname === 'localhost' || hostname === '127.0.0.1') return true;
+    if (hostname.endsWith('.netlify.app')) return true;
+    if (hostname.endsWith('.onrender.com')) return true;
+    if (hostname.endsWith('.up.railway.app')) return true;
+    if (hostname === 'railway.internal') return true;
+    if (hostname === SITE_DOMAIN) return true;
+    if (hostname === `www.${SITE_DOMAIN}`) return true;
+    if (FRONTEND_URL && origin === FRONTEND_URL) return true;
+    if (process.env.CORS_ORIGIN) {
+      const allowedOrigins = process.env.CORS_ORIGIN.split(',').map(o => o.trim().toLowerCase());
+      if (allowedOrigins.includes(origin.toLowerCase()) || allowedOrigins.includes(hostname)) return true;
+    }
+  } catch (err) {
+    console.error('❌ Invalid origin URL for CORS check:', origin, err.message);
+    return false;
+  }
+
   return false;
 }
 
@@ -565,14 +578,10 @@ app.post('/api/contact', async (req, res) => {
     ctaUrl: `mailto:${RESEND_FROM}`
   });
 
-  // ✅ RESPOND IMMEDIATELY TO FRONTEND — do NOT wait for emails
-  res.json({ id: result.lastID, success: true });
-
-  // 📧 Send confirmation email ASYNCHRONOUSLY (fire-and-forget)
-  console.log(`📧 Queueing user confirmation email to: ${email}`);
-  sendEmail(email, emailSubject, emailHtml)
-    .then(sent => console.log(`📧 User email result: ${sent ? 'SUCCESS ✓' : 'FAILED ✗'}`))
-    .catch(err => console.error(`❌ User email error: ${err.message}`));
+  console.log(`📧 Sending user confirmation email to: ${email}`);
+  const emailSent = await sendEmail(email, emailSubject, emailHtml);
+  console.log(`📧 User email result: ${emailSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
+  res.json({ id: result.lastID, success: true, emailSent });
 
   // 📧 Build and send admin notification asynchronously
   const adminSubject = `New Contact Message from ${first} - ${subject}`;

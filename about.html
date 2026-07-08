@@ -1252,8 +1252,11 @@
         const subjectEl = document.getElementById('cfSubject');
         if (subjectEl) subjectEl.value = '';
         
-        // Show success toast
-        showToast('✓ Message sent! We\'ll respond within 24 hours.', false);
+        if (data.emailSent === false) {
+          showToast('✓ Message saved, but confirmation email failed. Please contact support.', true);
+        } else {
+          showToast('✓ Message sent! We\'ll respond within 24 hours.', false);
+        }
 
         // Also show the modal for accessibility
         if (typeof window.openSuccessModal === 'function') {
