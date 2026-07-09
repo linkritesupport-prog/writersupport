@@ -678,14 +678,14 @@ app.post('/api/bookings/public', async (req, res) => {
 });
 
 app.get('/admin-login.html', (req, res, next) => {
-  const token = req.cookies[COOKIE_NAME];
-  if (token && verifyToken(token)) {
-    return res.redirect('/adminpanel.html');
-  }
   res.sendFile(path.join(__dirname, 'admin-login.html'));
 });
 
 app.get('/adminpanel.html', (req, res) => {
+  const token = req.cookies[COOKIE_NAME];
+  if (!token || !verifyToken(token)) {
+    return res.redirect('/admin-login.html');
+  }
   res.sendFile(path.join(__dirname, 'adminpanel.html'));
 });
 
