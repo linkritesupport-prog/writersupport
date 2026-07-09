@@ -289,15 +289,14 @@
     async function checkAuth() {
       try {
         const res = await fetch(BACKEND_URL + '/api/admin/verify', { credentials: 'include' });
-        if (res.ok) {
-          window.location.href = 'adminpanel.html';
-        }
+        return res.ok;
       } catch (err) {
-        // not authenticated
+        return false;
       }
     }
 
-    checkAuth();
+    // Do not auto-redirect from admin-login. Users should login explicitly to avoid
+    // a redirect loop when the production domain and API hosting are separate.
   </script>
 </body>
 </html>
