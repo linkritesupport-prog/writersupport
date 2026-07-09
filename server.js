@@ -297,7 +297,11 @@ function verifyToken(token) {
 }
 
 async function authMiddleware(req, res, next) {
-  const token = req.cookies[COOKIE_NAME];
+  let token = req.cookies[COOKIE_NAME];
+  // Fallback: accept Authorization: Bearer <token> header (useful for dev/local)
+  if (!token && req.headers && req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
   if (!token) return res.status(401).json({ authenticated: false });
   const data = verifyToken(token);
   if (!data) return res.status(401).json({ authenticated: false });
@@ -329,7 +333,11 @@ app.post('/api/admin/login', async (req, res) => {
 
   const token = createToken({ id: user.id, username: user.username });
   res.cookie(COOKIE_NAME, token, COOKIE_OPTIONS);
-  res.json({ success: true });
+  const resp = { success: true };
+  // For local development where cookies may be blocked by cross-origin previews,
+  // return the token in the JSON body so the frontend can use it as a fallback.
+  if (process.env.NODE_ENV !== 'production') resp.token = token;
+  res.json(resp);
 });
 
 app.get('/api/admin/verify', authMiddleware, (req, res) => {

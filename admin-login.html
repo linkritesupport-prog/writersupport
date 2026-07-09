@@ -263,12 +263,19 @@
           body: JSON.stringify({ username: user, password: pass })
         });
 
+        const payload = await res.json().catch(() => ({}));
         if (res.ok) {
+          // Store dev token (returned in non-production) as a fallback when cookies
+          // are blocked by cross-origin previews like Live Server. Also set the
+          // local auth flag so the panel can detect local login.
+          if (payload && payload.token) {
+            try { localStorage.setItem('WritersSupport_token', payload.token); } catch (e) {}
+            try { localStorage.setItem('WritersSupport_auth', '1'); } catch (e) {}
+          }
           window.location.href = 'adminpanel.html';
           return;
         }
 
-        const payload = await res.json().catch(() => ({}));
         errorEl.textContent = payload.message || 'Invalid credentials. Please try again.';
       } catch (err) {
         errorEl.textContent = 'Connection error. Please check your network.';

@@ -214,24 +214,7 @@
 </head>
 <body>
 
-<!-- LOGIN -->
-<div class="login-screen" id="loginScreen">
-  <div class="login-box">
-    <div class="login-logo">Writers<span>Support</span></div>
-    <div class="login-tag">Admin Panel · Internal Access Only</div>
-    <div class="login-group">
-      <label>Username</label>
-      <input type="text" id="loginUser" placeholder="admin" autocomplete="username"/>
-    </div>
-    <div class="login-group">
-      <label>Password</label>
-      <input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
-    </div>
-    <button class="login-btn" onclick="doLogin()">Sign In →</button>
-    <div class="login-error" id="loginError"></div>
-    <div class="login-hint">Demo: admin / WritersSupport2026</div>
-  </div>
-</div>
+<!-- NOTE: embedded login overlay removed. Use /admin-login.html for authentication. -->
 
 <!-- ADMIN WRAP -->
 <div class="admin-wrap">
@@ -580,6 +563,11 @@ const realAPI = {
     const fullURL = BACKEND_URL + path;
     console.log(`🔗 ${method} ${fullURL}`, body || '');
     const opts = { method, credentials: 'include', headers: {} };
+    // If a dev token exists (from login fallback), send it as a Bearer header
+    try {
+      const devToken = localStorage.getItem('WritersSupport_token');
+      if (devToken) opts.headers['Authorization'] = 'Bearer ' + devToken;
+    } catch (e) { /* ignore localStorage errors */ }
     if(body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
     const res = await fetch(fullURL, opts);
     const data = await res.json();
@@ -625,29 +613,15 @@ async function seedRequests() {
 // ══════════════════════════
 //  AUTH
 // ══════════════════════════
-async function doLogin() {
-  const u=document.getElementById('loginUser').value.trim();
-  const p=document.getElementById('loginPass').value;
-  try {
-    await api.login(u,p);
-    document.getElementById('loginScreen').classList.add('hidden');
-    await init();
-  } catch {
-    document.getElementById('loginError').textContent='Incorrect username or password.';
-    document.getElementById('loginPass').value='';
-  }
-}
-
 async function doLogout() {
   await api.logout();
-  document.getElementById('loginScreen').classList.remove('hidden');
-  document.getElementById('loginPass').value='';
-  document.getElementById('loginError').textContent='';
+  try { localStorage.removeItem('WritersSupport_token'); localStorage.removeItem('WritersSupport_auth'); } catch (e) {}
+  window.location.href = 'admin-login.html';
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
-  try { await api.verify(); document.getElementById('loginScreen').classList.add('hidden'); await init(); }
-  catch { /* show login */ }
+  try { await api.verify(); await init(); }
+  catch { window.location.href = 'admin-login.html'; }
 });
 
 // ══════════════════════════
