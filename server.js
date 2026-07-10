@@ -334,9 +334,9 @@ app.post('/api/admin/login', async (req, res) => {
   const token = createToken({ id: user.id, username: user.username });
   res.cookie(COOKIE_NAME, token, COOKIE_OPTIONS);
   const resp = { success: true };
-  // For local development where cookies may be blocked by cross-origin previews,
-  // return the token in the JSON body so the frontend can use it as a fallback.
-  if (process.env.NODE_ENV !== 'production') resp.token = token;
+  // Return a fallback auth token to the client so the admin panel can continue to
+  // authenticate even if cookies are blocked or the frontend/backend origin differs.
+  resp.token = token;
   res.json(resp);
 });
 
